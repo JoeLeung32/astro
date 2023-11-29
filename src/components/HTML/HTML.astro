@@ -1,5 +1,7 @@
 ---
 import "@fontsource/lato";
+import Header from "../Header/Header.astro";
+import Footer from "../Footer/Footer.astro";
 const { fullscreen } = Astro.props;
 ---
 <html lang="en">
@@ -13,14 +15,10 @@ const { fullscreen } = Astro.props;
 <body>
 <div class="app">
   {!fullscreen &&
-    <header>
-      Header
-    </header>}
+    <Header />}
   <slot />
   {!fullscreen &&
-    <footer>
-      Footer
-    </footer>}
+    <Footer />}
 </div>
 </body>
 </html>

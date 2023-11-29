@@ -1,0 +1,78 @@
+---
+import NavSection from "./NavSection.astro"
+import type { NavItem } from "./data"
+import navItemData from "./data"
+const navItem = navItemData as NavItem[]
+---
+<nav id="navMenu" class="absolute w-full md:max-w-xs shadow hidden select-none">
+	{navItem && navItem.map((item: any) =>
+		<NavSection item={item} />)}
+</nav>
+<style is:inline>
+    #menuToggle + nav {
+        display: none;
+        top: 48px;
+        left: 0;
+    }
+
+    #menuToggle:checked + nav {
+        display: block;
+
+        > .section {
+            background: white;
+            display: block;
+        }
+
+        .section {
+
+            &:not(.active) .section {
+                display: none !important;
+            }
+
+            > .section-item {
+                padding: 8px 16px;
+
+                &:hover {
+                    background: #f1f1f1;
+                }
+            }
+
+            &.active {
+                background: white;
+                box-shadow: inset 0 0 1em 0 rgba(0, 0, 0, .025);
+
+                > .section-item {
+                    background-color: #f9f9f9;
+
+                    > svg {
+                        transform: rotate(90deg);
+                    }
+                }
+
+                .section {
+                    display: block;
+                }
+            }
+        }
+    }
+</style>
+<script>
+	const navItems = document.querySelectorAll("#navMenu .section > .section-item:not([data-child=\"no\"])")
+	for (let idx = 0; idx <= navItems.length; idx++) {
+		if (navItems[idx]) {
+			navItems[idx].addEventListener("click", function() {
+				const parentNode = this.parentNode
+				const inActiveNodes = (itself: Element, nodeList: [Element]) => {
+					for (let idx = 0; idx <= nodeList.length; idx++) {
+						if (itself !== nodeList[idx]) {
+							nodeList[idx]?.classList.remove("active")
+						}
+					}
+				}
+				inActiveNodes(parentNode, parentNode?.parentNode?.querySelectorAll(".section:is(.active)"))
+				inActiveNodes(parentNode, parentNode?.querySelectorAll(".section:is(.active)"))
+				parentNode?.classList.toggle("active")
+			}, false)
+		}
+	}
+</script>
