@@ -1,0 +1,6 @@
+.idea
+.DS_*
+node_modules
+.env
+.env.*
+.vercel/**/*
