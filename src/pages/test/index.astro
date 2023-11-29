@@ -1,5 +1,24 @@
 ---
+import HTML from "../../components/HTML/HTML.astro";
 const time = new Date().toLocaleTimeString();
 ---
-<h1>/test</h1>
-<h1>{time}</h1>
+<HTML>
+<main>
+  <h1>/test</h1>
+  <h1>{time}</h1>
+</main>
+</HTML>
+<style is:inline>
+    body > div.app {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: minmax(32px, auto) 1fr minmax(24px, auto);
+        grid-template-areas:
+								"hd"
+								"ma"
+								"ft";
+
+        main {
+            grid-area: ma;
+        }
+    }
+</style>
