@@ -1,0 +1,7 @@
+---
+const time = new Date().toLocaleTimeString();
+const params = Astro.params
+---
+<h1>/test/[type]/[id]</h1>
+<h1>{time}</h1>
+<h1>{JSON.stringify(params)}</h1>
