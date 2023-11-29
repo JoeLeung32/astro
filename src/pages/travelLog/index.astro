@@ -1,11 +1,11 @@
 ---
-import HTML from "../components/HTML/HTML.astro";
-export const prerender = true;
+export const prerender = true
+import HTML from "../../components/HTML/HTML.astro"
 const time = new Date().toLocaleTimeString();
 ---
 <HTML>
 <main>
-  <h1>Astro</h1>
+  <h1>Travel Log</h1>
   <h1>{time}</h1>
 </main>
 </HTML>
@@ -17,15 +17,6 @@ const time = new Date().toLocaleTimeString();
 								"hd"
 								"ma"
 								"ft";
-
-        @media not all and (min-width: 768px) {
-            grid-template-columns: repeat(1, 1fr);
-            grid-template-rows: minmax(32px, auto) 1fr minmax(24px, auto);
-            grid-template-areas:
-										"hd"
-										"ma"
-										"ft";
-        }
 
         main {
             grid-area: ma;

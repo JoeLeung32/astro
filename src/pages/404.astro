@@ -1,7 +1,26 @@
 ---
+import HTML from "../components/HTML/HTML.astro";
 export const prerender = true
 const time = new Date().toLocaleTimeString();
 ---
-<h1>404</h1>
-<h1>{time}</h1>
-<h1>{time}</h1>
+<HTML fullscreen={true}>
+<main>
+  <h1>404</h1>
+  <h1>{time}</h1>
+</main>
+</HTML>
+<style is:inline>
+    body > div.app {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: 1fr;
+        grid-template-areas:
+								"ma";
+
+        @media not all and (min-width: 768px) {
+        }
+
+        main {
+            grid-area: ma;
+        }
+    }
+</style>
