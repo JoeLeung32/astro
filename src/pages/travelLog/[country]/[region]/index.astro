@@ -9,6 +9,9 @@ const {data: response} = await strapi.locations({
     filter: [
         {name: "filters[place_location_postcode][place_region][name][$eqi]", value: region.toString()},
         // {name: "filters[place_location_postcodes][id][$gte]", value: "1"}
+    ],
+    sort: [
+        {name: "sort[0]", value: "name:ASC"}
     ]
 }) as any
 ---
