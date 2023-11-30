@@ -35,7 +35,7 @@ const {
             <Icon name="mdi:home-city-outline" size={18}/>
             <div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
                 <span>{address}</span>
-                <span data-coordinate class="cursor-pointer">
+                <span data-copyToClipboard class="cursor-pointer">
                     <Icon name="mdi:content-copy" size={18}/>
                 </span>
             </div>
@@ -52,7 +52,10 @@ const {
             <Icon name="mdi:tag" size={18}/>
             <div class="flex flex-wrap justify-start gap-2">
                 {tags && tags.map(({attributes}: any) => {
-                    return <div class="block bg-gray-700 text-white px-2 rounded-md" data-slug={attributes.slug}>{attributes.name}</div>
+                    return (
+                            <div class="block bg-gray-700 text-white px-2 rounded-md"
+                                 data-slug={attributes.slug}>{attributes.name}</div>
+                    )
                 })}
             </div>
         </div>
@@ -60,7 +63,7 @@ const {
             <Icon name="mdi:map-marker" size={18}/>
             <div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
                 <span>{latitude},{longitude}</span>
-                <span data-coordinate class="cursor-pointer">
+                <span data-copyToClipboard class="cursor-pointer">
                     <Icon name="mdi:content-copy" size={18}/>
                 </span>
             </div>
@@ -71,11 +74,11 @@ const {
     </div>
 </TravelLogLayout>
 <script>
-    function copyToClipboard() {
+    async function copyToClipboard() {
         const value = this.parentNode.querySelector("span").innerText
-        navigator.clipboard.writeText(value)
+        await window.navigator.clipboard.writeText(value)
         alert("Copied: " + value);
     }
 
-    document?.querySelector("[data-coordinate]")?.addEventListener("click", copyToClipboard)
+    document?.querySelectorAll("[data-copyToClipboard]")?.forEach(d => d.addEventListener("click", copyToClipboard))
 </script>
