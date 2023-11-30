@@ -9,20 +9,58 @@ const {location} = params as any
 const {data: response} = await strapi.locations({
     filter: [
         {name: "filters[name][$eqi]", value: location.toString()},
-        // {name: "filters[place_location_postcodes][id][$gte]", value: "1"}
+    ],
+    populate: [
+        {name: "populate[place_location_postcode][fields][0]", value: "name"},
+        {name: "populate[place_location_postcode][fields][1]", value: "postcode"},
+        {name: "populate[place_location_tags][fields][0]", value: "name"},
+        {name: "populate[place_location_tags][fields][1]", value: "slug"},
+        {name: "populate[place_location_type][fields][0]", value: "name"},
+        {name: "populate[place_location_type][fields][1]", value: "slug"}
     ]
 }) as any
-const {address, latitude, longitude, description} = response?.at(0)?.attributes
+const {
+    address,
+    latitude,
+    longitude,
+    description,
+    place_location_postcode: {data: {attributes: postcode}},
+    place_location_tags: {data: tags},
+    place_location_type: {data: {attributes: type}},
+} = response?.at(0)?.attributes
 ---
 <TravelLogLayout header={location}>
     <div class="grid gap-4">
-        <div class="flex flex-wrap gap-2 justify-start items-center">
-            <Icon name="mdi:home-city-outline" size={18}/> {address}
+        <div class="flex flex-wrap gap-2 justify-start items-center" title="Address">
+            <Icon name="mdi:home-city-outline" size={18}/>
+            <div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
+                <span>{address}</span>
+                <span data-coordinate class="cursor-pointer">
+                    <Icon name="mdi:content-copy" size={18}/>
+                </span>
+            </div>
         </div>
-        <div class="flex flex-wrap">
-            <div class="flex flex-wrap gap-2 justify-start items-center bg-gray-200 px-2 py-1 rounded-3xl shadow">
-                <span class="block bg-white px-2 rounded-2xl">{latitude},{longitude}</span>
-                <span data-coordinate class="cursor-pointer px-1">
+        <div class="flex flex-wrap gap-2 justify-start items-center" title="Postcode">
+            <Icon name="mdi:land-plots-marker" size={18}/>
+            <span>{postcode.postcode} {postcode.name}</span>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-start items-center" title="Type">
+            <Icon name="mdi:book-open" size={18}/>
+            <span data-slug={type.slug}>{type.name}</span>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-start items-center" title="Tags">
+            <Icon name="mdi:tag" size={18}/>
+            <div class="flex flex-wrap justify-start gap-2">
+                {tags && tags.map(({attributes}: any) => {
+                    return <div class="block bg-gray-700 text-white px-2 rounded-md" data-slug={attributes.slug}>{attributes.name}</div>
+                })}
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-start items-center" title="coordinate">
+            <Icon name="mdi:map-marker" size={18}/>
+            <div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
+                <span>{latitude},{longitude}</span>
+                <span data-coordinate class="cursor-pointer">
                     <Icon name="mdi:content-copy" size={18}/>
                 </span>
             </div>
