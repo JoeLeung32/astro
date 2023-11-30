@@ -1,5 +1,5 @@
-import strapi from "../../../sources/strapi.tsx"
-import type { RES_Place_Region } from "../../../sources/strapiType.tsx"
+import strapi from "../../sources/strapi/strapi.tsx"
+import type { RES_Place_Region} from "../../sources/strapi/Type/Place_Region.tsx";
 
 export type NavItem = {
 	title: string
@@ -18,21 +18,29 @@ export default await new Promise(async (resolve) => {
 		filter: [
 			{name: "filters[place_country][name][$eqi]", value: "Australia"},
 			{name: "filters[place_location_postcodes][id][$gte]", value: "1"}
+		],
+		/*
+		populate: [
+			{name: "populate[place_country][fields][0]", value: "name"}
 		]
+		*/
 	}) as RES_Place_Region
 	const travelLog: NavItem = {
 		title: "Travel Log",
+		href: `/travelLog/`,
 		child: []
 	}
-	const australiaRegionsNavItem: NavItem[] | [] = australiaRegionsData.map(d => {
+	const australiaRegionsNavItem: NavItem[] | [] = australiaRegionsData.map((d: any) => {
 		const { attributes } = d
+		// const countryName = attributes.place_country.data.attributes.name;
 		return {
 			title: attributes?.name,
-			href: `/travelLog/${encodeURIComponent(attributes?.name || baseURL)}`
+			href: `/travelLog/Australia/${attributes.name}`
 		} as NavItem
 	})
 	travelLog.child?.push({
 		title: "Australia",
+		href: `/travelLog/Australia/`,
 		child: australiaRegionsNavItem
 	})
 	data.push(travelLog)

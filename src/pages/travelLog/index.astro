@@ -1,25 +1,32 @@
 ---
+import "@fontsource/lato"
+import "@fontsource-variable/lora"
+import strapi from "@sources/strapi/strapi";
 export const prerender = true
-import HTML from "../../components/HTML/HTML.astro"
-const time = new Date().toLocaleTimeString();
+import TravelLogLayout from "@layouts/TravelLogLayout/TravelLogLayout.astro"
+const { data: response } = await strapi.countries() as any
 ---
-<HTML>
-<main>
-  <h1>Travel Log</h1>
-  <h1>{time}</h1>
-</main>
-</HTML>
-<style is:inline>
-    body > div.app {
-        grid-template-columns: repeat(1, 1fr);
-        grid-template-rows: minmax(32px, auto) 1fr minmax(24px, auto);
-        grid-template-areas:
-								"hd"
-								"ma"
-								"ft";
-
-        main {
-            grid-area: ma;
+<TravelLogLayout header="Travel Log">
+    <div class="page--body grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {response && response.map(({id, attributes}: any) => {
+            const url = `/travelLog/${attributes.name}`
+            return (
+                    <a id={id} href=`${url}`
+                       class="page--card-name block px-3 py-5 rounded-2xl shadow cursor-pointer text-center">
+                    <span class="text-lg font-medium">
+                    {attributes.name}
+                    </span>
+                    </a>
+            )
+        })}
+    </div>
+</TravelLogLayout>
+<style>
+    .page {
+        &--card {
+            &-name {
+                font-family: "Lora Variable", sans-serif;
+            }
         }
     }
 </style>

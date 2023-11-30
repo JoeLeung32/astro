@@ -3,8 +3,8 @@ import { Icon } from "astro-icon/components"
 const { item: { title, child, href, target } } = Astro.props
 const hadChild = !(typeof child === "undefined" || child.length === 0)
 ---
-<a href={href} target={target} class="section-item flex flex-wrap justify-between items-center cursor-pointer">
-	<span class="section-item-name">{title}</span>
+<div class="section-item flex flex-wrap justify-between items-center cursor-pointer">
+	<a href={href} target={target} class="section-item-name flex-grow">{title}</>
 	{hadChild &&
 		<Icon name="mdi:chevron-right" size={24} />}
-</a>
+</div>

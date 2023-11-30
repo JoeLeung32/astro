@@ -1,0 +1,16 @@
+---
+import "@fontsource/lato"
+import "@fontsource-variable/lora"
+import AppLayout from "../../../../layouts/AppLayout/AppLayout.astro"
+const params = Astro.params
+// const { region, postcode } = params
+console.log("~>", params)
+---
+<AppLayout>
+    <div slot="header"/>
+    <main>
+        <h1>[Postcode]</h1>
+        <div>{JSON.stringify(params)}</div>
+    </main>
+    <div slot="footer"/>
+</AppLayout>

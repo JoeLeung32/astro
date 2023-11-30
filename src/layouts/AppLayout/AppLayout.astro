@@ -1,0 +1,57 @@
+---
+import "@fontsource/lato";
+import Header from "../../components/Header/Header.astro";
+import Footer from "../../components/Footer/Footer.astro";
+---
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="generator" content={Astro.generator}/>
+    <title>Astro</title>
+</head>
+<body>
+<div class="app">
+    {Astro.slots.has("header") &&
+            <Header/>}
+    <slot/>
+    {Astro.slots.has("footer") &&
+            <Footer/>}
+</div>
+</body>
+</html>
+<style is:inline>
+    body > div.app {
+        display: grid;
+        min-height: 100dvh;
+        gap: 0;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: minmax(32px, auto) 1fr minmax(24px, auto);
+        grid-template-areas:
+								"hd"
+								"ma"
+								"ft";
+
+        @media not all and (min-width: 768px) {
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: minmax(32px, auto) 1fr minmax(24px, auto);
+            grid-template-areas:
+										"hd"
+										"ma"
+										"ft";
+        }
+
+        header {
+            grid-area: hd;
+        }
+
+        footer {
+            grid-area: ft;
+        }
+
+        main {
+            grid-area: ma;
+        }
+    }
+</style>

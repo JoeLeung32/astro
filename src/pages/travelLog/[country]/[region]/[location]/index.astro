@@ -1,0 +1,43 @@
+---
+import "@fontsource/lato"
+import "@fontsource-variable/lora"
+import {Icon} from "astro-icon/components"
+import strapi from "../../../../../sources/strapi/strapi";
+import TravelLogLayout from "../../../../../layouts/TravelLogLayout/TravelLogLayout.astro";
+const params = Astro.params
+const {location} = params as any
+const {data: response} = await strapi.locations({
+    filter: [
+        {name: "filters[name][$eqi]", value: location.toString()},
+        // {name: "filters[place_location_postcodes][id][$gte]", value: "1"}
+    ]
+}) as any
+const {address, latitude, longitude, description} = response?.at(0)?.attributes
+---
+<TravelLogLayout header={location}>
+    <div class="grid gap-4">
+        <div class="flex flex-wrap gap-2 justify-start items-center">
+            <Icon name="mdi:home-city-outline" size={18}/> {address}
+        </div>
+        <div class="flex flex-wrap">
+            <div class="flex flex-wrap gap-2 justify-start items-center bg-gray-200 px-2 py-1 rounded-3xl shadow">
+                <span class="block bg-white px-2 rounded-2xl">{latitude},{longitude}</span>
+                <span data-coordinate class="cursor-pointer px-1">
+                    <Icon name="mdi:content-copy" size={18}/>
+                </span>
+            </div>
+        </div>
+        <div>
+            <span>{description}</span>
+        </div>
+    </div>
+</TravelLogLayout>
+<script>
+    function copyToClipboard() {
+        const value = this.parentNode.querySelector("span").innerText
+        navigator.clipboard.writeText(value)
+        alert("Copied: " + value);
+    }
+
+    document?.querySelector("[data-coordinate]")?.addEventListener("click", copyToClipboard)
+</script>
