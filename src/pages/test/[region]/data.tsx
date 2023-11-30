@@ -1,5 +1,5 @@
-import strapi from "../../../sources/strapi.tsx"
-import type { RES_Place_Region } from "../../../sources/strapiType.tsx"
+import strapi from "../../../sources/strapi/strapi.tsx"
+import type { RES_Place_Region} from "../../../sources/strapi/Type/Place_Region.tsx";
 
 const queryRegion = async (region: string) => {
 	const { data: australiaRegionsData } = await strapi.australia.regions({
