@@ -2,8 +2,9 @@
 import "@fontsource/lato"
 import "@fontsource-variable/lora"
 import {Icon} from "astro-icon/components"
-import strapi from "../../../../../sources/strapi/strapi";
-import TravelLogLayout from "../../../../../layouts/TravelLogLayout/TravelLogLayout.astro";
+import strapi from "@sources/strapi/strapi";
+import TravelLogLayout from "@layouts/TravelLogLayout/TravelLogLayout.astro";
+import CopyToClipboard from "@components/CopyToClipboard/CopyToClipboard.astro"
 const params = Astro.params
 const {location} = params as any
 const {data: response} = await strapi.locations({
@@ -33,12 +34,9 @@ const {
     <div class="grid gap-4">
         <div class="flex flex-wrap gap-2 justify-start items-center" title="Address">
             <Icon name="mdi:home-city-outline" size={18}/>
-            <div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
-                <span>{address}</span>
-                <span data-copyToClipboard class="cursor-pointer">
-                    <Icon name="mdi:content-copy" size={18}/>
-                </span>
-            </div>
+            <CopyToClipboard>
+                {address}
+            </CopyToClipboard>
         </div>
         <div class="flex flex-wrap gap-2 justify-start items-center" title="Postcode">
             <Icon name="mdi:land-plots-marker" size={18}/>
@@ -61,24 +59,12 @@ const {
         </div>
         <div class="flex flex-wrap gap-2 justify-start items-center" title="coordinate">
             <Icon name="mdi:map-marker" size={18}/>
-            <div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
-                <span>{latitude},{longitude}</span>
-                <span data-copyToClipboard class="cursor-pointer">
-                    <Icon name="mdi:content-copy" size={18}/>
-                </span>
-            </div>
+            <CopyToClipboard>
+                {latitude},{longitude}
+            </CopyToClipboard>
         </div>
         <div>
             <span>{description}</span>
         </div>
     </div>
 </TravelLogLayout>
-<script>
-    async function copyToClipboard() {
-        const value = this.parentNode.querySelector("span").innerText
-        await window.navigator.clipboard.writeText(value)
-        alert("Copied: " + value);
-    }
-
-    document?.querySelectorAll("[data-copyToClipboard]")?.forEach(d => d.addEventListener("click", copyToClipboard))
-</script>

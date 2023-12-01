@@ -19,7 +19,6 @@ const navItem = navItemData as NavItem[]
         display: block;
 
         > .section {
-            background: white;
             display: block;
         }
 
@@ -29,14 +28,6 @@ const navItem = navItemData as NavItem[]
                 display: none !important;
             }
 
-            > .section-item {
-                padding: 8px 16px;
-
-                &:hover {
-                    background: #f1f1f1;
-                }
-            }
-
             &.active {
                 background: white;
                 box-shadow: inset 0 0 1em 0 rgba(0, 0, 0, .025);
@@ -44,7 +35,7 @@ const navItem = navItemData as NavItem[]
                 > .section-item {
                     background-color: #f9f9f9;
 
-                    > svg {
+                    > .icon {
                         transform: rotate(90deg);
                     }
                 }
