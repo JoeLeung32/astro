@@ -1,31 +1,39 @@
 ---
-import {Icon} from "astro-icon/components";
+import { Icon } from "astro-icon/components"
 ---
-<div class="flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200">
-    <div>
-        <slot/>
-    </div>
-    <span data-copyToClipboard class="cursor-pointer">
-        <Icon name="mdi:content-copy" size={18}/>
-    </span>
+<!--
+flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200
+-->
+<div class="copyToClipboard gap-2 flex flex-nowrap items-center">
+	<div class="underline underline-offset-2 decoration-gray-400">
+		<slot />
+	</div>
+	<div data-copyToClipboard class="cursor-pointer">
+		<Icon name="mdi:content-copy" size={18} />
+	</div>
 </div>
-<script>
-    async function copyToClipboard() {
-        const range = document.createRange()
-        const object = this.parentNode.querySelector(":first-child")
-        const value = object.innerText
+<style>
+    .copyToClipboard {
 
-        range.selectNode(object)
-
-        window.getSelection()?.removeAllRanges()
-        window.getSelection()?.addRange(range)
-
-        await window.navigator.clipboard.writeText(value)
-        alert("Copied")
     }
+</style>
+<script>
+	async function copyToClipboard() {
+		const range = document.createRange()
+		const object = this.parentNode.querySelector(":first-child")
+		const value = object.innerText
 
-    document?.querySelectorAll("[data-copyToClipboard]")?.forEach(d => {
-        d.removeEventListener("click", copyToClipboard)
-        d.addEventListener("click", copyToClipboard)
-    })
+		range.selectNode(object)
+
+		window.getSelection()?.removeAllRanges()
+		window.getSelection()?.addRange(range)
+
+		await window.navigator.clipboard.writeText(value)
+		alert("Copied")
+	}
+
+	document?.querySelectorAll("[data-copyToClipboard]")?.forEach(d => {
+		d.removeEventListener("click", copyToClipboard)
+		d.addEventListener("click", copyToClipboard)
+	})
 </script>

@@ -1,0 +1,147 @@
+---
+import "@fontsource-variable/noto-sans-hk"
+import "@fontsource-variable/lora"
+import { Icon } from "astro-icon/components"
+import strapi from "@sources/strapi/strapi"
+import TravelLogLayout from "@layouts/TravelLogLayout/TravelLogLayout.astro"
+import CopyToClipboard from "@components/CopyToClipboard/CopyToClipboard.astro"
+import LoadMoreButton from "@components/LoadMoreButton/LoadMoreButton.svelte"
+const params = Astro.params
+const { location } = params as any
+const { data: response } = await strapi.locations({
+	filter: [
+		{ name: "filters[name][$eqi]", value: location.toString() }
+	],
+	populate: [
+		{ name: "populate[images]", value: "*" },
+		{ name: "populate[place_location_postcode][fields][0]", value: "name" },
+		{ name: "populate[place_location_postcode][fields][1]", value: "postcode" },
+		{ name: "populate[place_location_tags][fields][0]", value: "name" },
+		{ name: "populate[place_location_tags][fields][1]", value: "slug" },
+		{ name: "populate[place_location_type][fields][0]", value: "name" },
+		{ name: "populate[place_location_type][fields][1]", value: "slug" }
+	]
+}) as any
+const {
+	address,
+	latitude,
+	longitude,
+	description,
+	images: { data: images },
+	place_location_postcode: { data: { attributes: postcode } },
+	place_location_tags: { data: tags },
+	place_location_type: { data: { attributes: type } }
+} = response?.at(0)?.attributes
+---
+<TravelLogLayout header={location}>
+	<div class="grid gap-4">
+		<div class="locationInformation">
+			<div class="flex flex-wrap items-center">
+				<Icon name="mdi:book-open" size={18} />
+			</div>
+			<div data-slug={type.slug} class="inline">{type.name}</div>
+			<div class="flex flex-wrap items-center">
+				<Icon name="mdi:tag" size={18} />
+			</div>
+			<div class="flex flex-wrap justify-start gap-2">
+				{tags && tags.map(({ attributes }: any) => {
+					return (
+						<div class="block bg-gray-700 text-white px-2 rounded-md"
+							 data-slug={attributes.slug}>{attributes.name}</div>
+					)
+				})}
+			</div>
+			<div class="flex flex-wrap items-center">
+				<Icon name="mdi:land-plots-marker" size={18} />
+			</div>
+			<div>{postcode.postcode}, {postcode.name}</div>
+			<div class="flex flex-wrap items-center">
+				<Icon name="mdi:home-city-outline" size={18} />
+			</div>
+			<CopyToClipboard>
+				{address}
+			</CopyToClipboard>
+			<div class="flex flex-wrap items-center">
+				<Icon name="mdi:map-marker" size={18} />
+			</div>
+			<CopyToClipboard>
+				{latitude},{longitude}
+			</CopyToClipboard>
+		</div>
+		<article class="py-3">
+			<h2 class="text-3xl font-bold my-2">Description</h2>
+			<div class="text-justify">{description}</div>
+		</article>
+		<div>
+			<h2 class="text-3xl font-bold my-2">Photos</h2>
+			<div class="album pb-6">
+				{images?.map(({ attributes: { formats } }: any, idx: number) => {
+					const display = idx < 6 ? "block" : "hidden"
+					return (
+						<div class=`album--item bg-gray-200 ${display}`>
+							<picture>
+								<source media="not all and (min-width: 768px)" srcset={formats.medium.url} />
+								<img
+									src={formats.large.url}
+									decoding="async"
+									loading="lazy"
+								/>
+							</picture>
+						</div>
+					)
+				})}
+			</div>
+			{images.length > 6 && (
+				<div class="flex flex-wrap justify-center items-center">
+					<LoadMoreButton wrapper=".album" item=".album--item.hidden" offset="12" client:visible />
+				</div>
+			)}
+		</div>
+	</div>
+</TravelLogLayout>
+<style>
+    h2 {
+        font-family: "Lora Variable", sans-serif;
+    }
+
+    .locationInformation {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 18px 1fr;
+    }
+
+    .album {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+        &--item {
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            position: relative;
+
+            > picture {
+                > img {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    max-width: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+        @media not all and (min-width: 1280px) {
+            grid-template-columns: repeat(auto-fill, minmax(25dvw, 1fr));
+
+        }
+
+        @media not all and (min-width: 768px) {
+            grid-template-columns: repeat(auto-fill, minmax(50dvw, 1fr));
+
+            &--item {
+                aspect-ratio: 3/2;
+            }
+        }
+    }
+</style>

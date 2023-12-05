@@ -3,7 +3,7 @@ import NavSectionItem from "./NavSectionItem.astro"
 const { item: { child } } = Astro.props
 const hadChild = !(typeof child === "undefined" || child.length === 0)
 ---
-<div class="section bg-white">
+<div class="section">
 	<NavSectionItem {...Astro.props} />
 	{hadChild && child.map((item: any) =>
 		<Astro.self item={item} />)}

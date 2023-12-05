@@ -4,7 +4,7 @@ import type { NavItem } from "./data"
 import navItemData from "./data"
 const navItem = navItemData as NavItem[]
 ---
-<nav id="navMenu" class="absolute w-full md:max-w-xs shadow hidden select-none">
+<nav id="navMenu" class="bg-white absolute w-full md:max-w-xs shadow hidden select-none">
 	{navItem && navItem.map((item: any) =>
 		<NavSection item={item} />)}
 </nav>

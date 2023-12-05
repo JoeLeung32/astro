@@ -1,0 +1,44 @@
+---
+import "@fontsource-variable/noto-sans-hk"
+import "@fontsource-variable/lora"
+import strapi from "../../../sources/strapi/strapi"
+import TravelLogLayout from "../../../layouts/TravelLogLayout/TravelLogLayout.astro"
+const { pathname } = Astro.url
+const params = Astro.params
+const { country } = params as any
+const { data: response } = await strapi.regions({
+	filter: [
+		{ name: "filters[place_country][name][$eqi]", value: country.toString() },
+		{ name: "filters[place_location_postcodes][id][$gte]", value: "1" }
+	]
+}) as any
+---
+<TravelLogLayout header={country}>
+	<div class="page--body grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+		{response && response.map(({ id, attributes }: any) => {
+			const url = `${pathname}/${attributes.name}`
+			return (
+				<a id={id} href=`${url}`
+				   class="page--card-name block px-3 py-5 rounded-2xl shadow cursor-pointer text-center">
+                        <span class="block text-2xl font-medium">
+                            {attributes.abbreviation}
+                        </span>
+					<span class="block text-xs">
+                            {attributes.name}
+                        </span>
+				</a>
+			)
+		})}
+	</div>
+</TravelLogLayout>
+<style>
+    .page {
+        &--card {
+            &-name {
+                & > :first-child {
+                    font-family: "Lora Variable", sans-serif;
+                }
+            }
+        }
+    }
+</style>
