@@ -5,6 +5,7 @@ import { Icon } from "astro-icon/components"
 import strapi from "@sources/strapi/strapi"
 import TravelLogLayout from "@layouts/TravelLogLayout/TravelLogLayout.astro"
 import CopyToClipboard from "@components/CopyToClipboard/CopyToClipboard.astro"
+import LoadMoreButton from "@components/LoadMoreButton/LoadMoreButton.svelte"
 const params = Astro.params
 const { location } = params as any
 const { data: response } = await strapi.locations({
@@ -73,7 +74,7 @@ const {
 		</article>
 		<div>
 			<h2 class="text-3xl font-bold my-2">Photos</h2>
-			<div class="album">
+			<div class="album pb-6">
 				{images?.map(({ attributes: { formats } }: any, idx: number) => {
 					const display = idx < 6 ? "block" : "hidden"
 					return (
@@ -90,6 +91,11 @@ const {
 					)
 				})}
 			</div>
+			{images.length > 6 && (
+				<div class="flex flex-wrap justify-center items-center">
+					<LoadMoreButton wrapper=".album" item=".album--item.hidden" offset="12" client:visible />
+				</div>
+			)}
 		</div>
 	</div>
 </TravelLogLayout>
