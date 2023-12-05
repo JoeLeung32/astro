@@ -27,7 +27,7 @@ export default await new Promise(async (resolve) => {
 	}) as RES_Place_Region
 	const travelLog: NavItem = {
 		title: "Travel Log",
-		href: `/travelLog/`,
+		href: `/Travel Log`,
 		child: []
 	}
 	const australiaRegionsNavItem: NavItem[] | [] = australiaRegionsData.map((d: any) => {
@@ -35,12 +35,12 @@ export default await new Promise(async (resolve) => {
 		// const countryName = attributes.place_country.data.attributes.name;
 		return {
 			title: attributes?.name,
-			href: `/travelLog/Australia/${attributes.name}`
+			href: `/Travel Log/Australia/${attributes.name}`
 		} as NavItem
 	})
 	travelLog.child?.push({
 		title: "Australia",
-		href: `/travelLog/Australia/`,
+		href: `/Travel Log/Australia/`,
 		child: australiaRegionsNavItem
 	})
 	data.push(travelLog)
