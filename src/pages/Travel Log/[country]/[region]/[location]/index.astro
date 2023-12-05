@@ -74,7 +74,7 @@ const {
 		<div>
 			<h2 class="text-3xl font-bold my-2">Photos</h2>
 			<div class="album">
-				{images?.map(({ attributes: { name, formats } }, idx) => {
+				{images?.map(({ attributes: { formats } }: any, idx: number) => {
 					const display = idx < 6 ? "block" : "hidden"
 					return (
 						<div class=`album--item bg-gray-200 ${display}`>
