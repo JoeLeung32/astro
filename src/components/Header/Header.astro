@@ -2,14 +2,16 @@
 import { Icon } from "astro-icon/components"
 import NavMenu from "../NavMenu/NavMenu.astro"
 ---
-<header class="flex flex-wrap flex-row justify-between items-center p-2 shadow select-none">
-	<div>
-		<label for="menuToggle" class="cursor-pointer">
-			<Icon name="mdi:menu" size={32} />
-		</label>
-	</div>
-	<div>
-		<Icon name="mdi:account-circle" size={32} />
+<header class="shadow select-none">
+	<div class="container mx-auto flex flex-wrap flex-row justify-between items-center p-2">
+		<div>
+			<label for="menuToggle" class="cursor-pointer">
+				<Icon name="mdi:menu" size={32} />
+			</label>
+		</div>
+		<div>
+			<Icon name="mdi:account-circle" size={32} />
+		</div>
 	</div>
 </header>
 <input type="checkbox" id="menuToggle" value="false" class="hidden" autocomplete="off" />
