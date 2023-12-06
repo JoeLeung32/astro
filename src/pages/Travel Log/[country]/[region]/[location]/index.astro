@@ -7,7 +7,7 @@ import TravelLogLayout from "@layouts/TravelLogLayout/TravelLogLayout.astro"
 import CopyToClipboard from "@components/CopyToClipboard/CopyToClipboard.astro"
 import LoadMoreButton from "@components/LoadMoreButton/LoadMoreButton.svelte"
 const params = Astro.params
-const { location } = params as any
+const { location, region } = params as any
 const { data: response } = await strapi.locations({
 	filter: [
 		{ name: "filters[name][$eqi]", value: location.toString() }
@@ -33,7 +33,7 @@ const {
 	place_location_type: { data: { attributes: type } }
 } = response?.at(0)?.attributes
 ---
-<TravelLogLayout header={location}>
+<TravelLogLayout header={location} title={[location, region].join(", ")} description={description}>
 	<div class="grid gap-4">
 		<div class="locationInformation">
 			<div class="flex flex-wrap items-center">

@@ -3,7 +3,7 @@ import { Icon } from "astro-icon/components"
 import AppLayout from "../AppLayout/AppLayout.astro"
 const url = Astro.url
 const props = Astro.props
-const { header } = props as any
+const { title, description, header } = props as any
 const { pathname } = url
 const breadcrumb = pathname?.split("/")?.filter(t => t.length)?.slice(0, -1)
 const breadcrumbList = breadcrumb?.map((urlText, idx, ary) => ({
@@ -11,7 +11,7 @@ const breadcrumbList = breadcrumb?.map((urlText, idx, ary) => ({
 	url: `/${ary.slice(0, idx + 1).join("/")}`
 }))
 ---
-<AppLayout>
+<AppLayout title={title || header} description={description}>
 	<div slot="header" />
 	<main>
 		<slot name="header" />
