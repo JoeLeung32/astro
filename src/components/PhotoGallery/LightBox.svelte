@@ -47,7 +47,7 @@
 </script>
 
 <dialog
-	class="container hidden flex-wrap justify-center items-center bg-transparent p-0 md:p-4"
+	class="container hidden flex-wrap justify-center items-center bg-transparent p-0 md:p-4 overflow-hidden"
 	bind:this={dialog}
 	on:close={onClosing}
 	on:click|self={closeDialog}
@@ -71,6 +71,9 @@
 			<Icon icon="mdi:chevron-right" class="text-5xl text-white" />
 		</div>
 		<div class="z-0 bg-gray-900 shadow">
+			<div class="z-0 absolute left-0 top-0 w-full h-full flex flex-wrap justify-center items-center">
+				<Icon icon="mdi:loading" class="text-3xl text-white animate-spin" />
+			</div>
 			{#if typeof imageObj !== "undefined" && imageObj !== null}
 				<picture class="absolute z-0 left-0 top-0">
 					<source media="not all and (min-width: 768px)"
@@ -111,7 +114,7 @@
     }
 
     dialog[open] {
-		display: flex;
+        display: flex;
         animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
