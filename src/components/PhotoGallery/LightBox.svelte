@@ -74,12 +74,10 @@
 		<div class="z-0 bg-gray-900 shadow">
 			{#if typeof imageObj !== "undefined" && imageObj !== null}
 				<picture class="absolute z-0 left-0 top-0">
-					<!--
 					<source media="not all and (min-width: 768px)"
 							srcset="{getDefaultImage('medium').url}" />
 					<source media="not all and (min-width: 1024px)"
 							srcset="{getDefaultImage('large').url}" />
-					-->
 					<img src="{getDefaultImage('xlarge').url}" class="hidden" />
 				</picture>
 				<svg xmlns="http://www.w3.org/2000/svg"
@@ -97,8 +95,8 @@
     }
 
     dialog > div {
-        min-width: 50dvw;
-        min-height: 50dvh;
+        min-width: 10px;
+        min-height: 10px;
     }
 
     dialog > div > div > svg,
