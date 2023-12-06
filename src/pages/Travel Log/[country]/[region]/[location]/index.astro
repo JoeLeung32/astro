@@ -5,7 +5,7 @@ import { Icon } from "astro-icon/components"
 import strapi from "@sources/strapi/strapi"
 import TravelLogLayout from "@layouts/TravelLogLayout/TravelLogLayout.astro"
 import CopyToClipboard from "@components/CopyToClipboard/CopyToClipboard.astro"
-import LoadMoreButton from "@components/LoadMoreButton/LoadMoreButton.svelte"
+import PhotoGallery from "@components/PhotoGallery/PhotoGallery.svelte"
 const params = Astro.params
 const { location, region } = params as any
 const { data: response } = await strapi.locations({
@@ -74,28 +74,7 @@ const {
 		</article>
 		<div>
 			<h2 class="text-3xl font-bold my-2">Photos</h2>
-			<div class="album pb-6">
-				{images?.map(({ attributes: { formats } }: any, idx: number) => {
-					const display = idx < 6 ? "block" : "hidden"
-					return (
-						<div class=`album--item bg-gray-200 ${display}`>
-							<picture>
-								<source media="not all and (min-width: 768px)" srcset={formats.medium.url} />
-								<img
-									src={formats.large.url}
-									decoding="async"
-									loading="lazy"
-								/>
-							</picture>
-						</div>
-					)
-				})}
-			</div>
-			{images.length > 6 && (
-				<div class="flex flex-wrap justify-center items-center">
-					<LoadMoreButton wrapper=".album" item=".album--item.hidden" offset="12" client:visible />
-				</div>
-			)}
+			<PhotoGallery images={images} client:load />
 		</div>
 	</div>
 </TravelLogLayout>
@@ -108,40 +87,5 @@ const {
         display: grid;
         gap: 16px;
         grid-template-columns: 18px 1fr;
-    }
-
-    .album {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-
-        &--item {
-            aspect-ratio: 1/1;
-            overflow: hidden;
-            position: relative;
-
-            > picture {
-                > img {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    max-width: 100%;
-                    object-fit: cover;
-                }
-            }
-        }
-
-        @media not all and (min-width: 1280px) {
-            grid-template-columns: repeat(auto-fill, minmax(25dvw, 1fr));
-
-        }
-
-        @media not all and (min-width: 768px) {
-            grid-template-columns: repeat(auto-fill, minmax(50dvw, 1fr));
-
-            &--item {
-                aspect-ratio: 3/2;
-            }
-        }
     }
 </style>
