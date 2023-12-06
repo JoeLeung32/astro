@@ -75,12 +75,12 @@
 				<Icon icon="mdi:loading" class="text-3xl text-white animate-spin" />
 			</div>
 			{#if typeof imageObj !== "undefined" && imageObj !== null}
-				<picture class="absolute z-0 left-0 top-0">
+				<picture class="absolute z-0 left-0 top-0 w-full h-full flex flex-wrap justify-center items-center">
 					<source media="not all and (min-width: 768px)"
 							srcset="{getDefaultImage('medium').url}" />
 					<source media="not all and (min-width: 1024px)"
 							srcset="{getDefaultImage('large').url}" />
-					<img src="{getDefaultImage('xlarge').url}" class="hidden" />
+					<img src="{getDefaultImage('xlarge').url}" class="hidden w-full h-full" />
 				</picture>
 				<svg xmlns="http://www.w3.org/2000/svg"
 					 class="w-full h-full"
