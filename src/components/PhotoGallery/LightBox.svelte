@@ -17,7 +17,6 @@
 		if (typeof imageObj === "undefined" || imageObj === null) return null
 		const defaultImage = imageObj?.attributes.formats[size]
 		if (typeof defaultImage === "undefined") return imageObj?.attributes
-		console.log("~>", defaultImage)
 		return defaultImage
 	}
 
@@ -48,13 +47,13 @@
 </script>
 
 <dialog
-	class="container bg-transparent border-0 p-0 md:p-4"
+	class="container hidden flex-wrap justify-center items-center bg-transparent p-0 md:p-4"
 	bind:this={dialog}
 	on:close={onClosing}
 	on:click|self={closeDialog}
 >
-	<div class="relative mx-auto w-fit h-fit" on:click|stopPropagation>
-		<button class="z-30 absolute right-4 top-4 outline-none" autofocus on:click={closeDialog}>
+	<div class="relative flex flex-wrap justify-center items-center w-fit h-fit" on:click|stopPropagation>
+		<button class="z-30 absolute right-1 top-1 md:right-4 md:top-4 outline-none" autofocus on:click={closeDialog}>
 			<Icon icon="mdi:close" class="text-3xl text-white" />
 		</button>
 		<div class="z-20 absolute left-0 top-1/4 h-1/2 flex felx-wrap items-center cursor-pointer"
@@ -112,6 +111,7 @@
     }
 
     dialog[open] {
+		display: flex;
         animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
