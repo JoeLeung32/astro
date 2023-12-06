@@ -3,7 +3,7 @@ import { Icon } from "astro-icon/components"
 import NavMenu from "../NavMenu/NavMenu.astro"
 ---
 <header class="shadow select-none">
-	<div class="container mx-auto flex flex-wrap flex-row justify-between items-center p-2">
+	<div class="container mx-auto flex flex-wrap flex-row justify-between items-center p-2 relative">
 		<div>
 			<label for="menuToggle" class="cursor-pointer">
 				<Icon name="mdi:menu" size={32} />
@@ -12,7 +12,7 @@ import NavMenu from "../NavMenu/NavMenu.astro"
 		<div>
 			<Icon name="mdi:account-circle" size={32} />
 		</div>
+		<input type="checkbox" id="menuToggle" value="false" class="hidden" autocomplete="off" />
+		<NavMenu />
 	</div>
 </header>
-<input type="checkbox" id="menuToggle" value="false" class="hidden" autocomplete="off" />
-<NavMenu />
