@@ -1,22 +1,38 @@
 ---
-import Header from "../../components/Header/Header.astro";
-import Footer from "../../components/Footer/Footer.astro";
+import { SEO } from "astro-seo"
+const props = Astro.props
+const { title, description } = props as any
+import Header from "../../components/Header/Header.astro"
+import Footer from "../../components/Footer/Footer.astro"
 ---
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta name="generator" content={Astro.generator}/>
-    <title>Astro</title>
+	<SEO
+		charset="UTF-8"
+		title={title || "Homepage"}
+		titleTemplate="%s - me.chunkit.hk"
+		description={description || ""}
+		twitter={{
+			creator: "@joeleung32"
+		}}
+		extend={{
+			link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+			meta: [
+				{
+					name: "viewport",
+					content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+				}
+			]
+		}}
+	/>
 </head>
 <body>
 <div class="app">
-    {Astro.slots.has("header") &&
-            <Header/>}
-    <slot/>
-    {Astro.slots.has("footer") &&
-            <Footer/>}
+	{Astro.slots.has("header") &&
+		<Header />}
+	<slot />
+	{Astro.slots.has("footer") &&
+		<Footer />}
 </div>
 </body>
 </html>
