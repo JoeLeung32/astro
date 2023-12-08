@@ -1,0 +1,28 @@
+---
+import AppLayout from "@layouts/AppLayout/AppLayout.astro";
+import fetchApi from "@libs/strapi"
+import type Place_Region from "@interface/place_region"
+const {pathname} = Astro.url
+const regions = await fetchApi<Place_Region[]>({
+  endpoint: "place-regions",
+  wrappedByKey: "data"
+})
+---
+<AppLayout>
+  <div slot="header" />
+  <main class="container mx-auto">
+    <div class="p-4">
+      <h1 class="text-3xl font-bold">Regions</h1>
+      {regions.map((data) => {
+        return (
+            <div>
+              <a href={`${pathname}${data.attributes.abbreviation}/`}>
+                {data.attributes.name}
+              </a>
+            </div>
+        )
+      })}
+    </div>
+  </main>
+  <div slot="footer" />
+</AppLayout>

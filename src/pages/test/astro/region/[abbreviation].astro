@@ -1,0 +1,32 @@
+---
+import fetchApi from "@libs/strapi"
+import type Place_Region from "@interface/place_region"
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
+
+const { abbreviation } = Astro.params;
+
+let region: Place_Region
+
+try {
+	region = await fetchApi<Place_Region>({
+		endpoint: "pLace-regions",
+		wrappedByKey: "data",
+		wrappedByList: true,
+		query: {
+			"filters[abbreviation][$eqi]": abbreviation || ""
+		}
+	})
+} catch (e) {
+	return Astro.redirect('/404');
+}
+---
+
+<AppLayout>
+	<div slot="header" />
+	<main class="container mx-auto">
+		<div class="p-4">
+			<h1 class="text-3xl font-bold">{region?.attributes.name || "No Data"}</h1>
+		</div>
+	</main>
+	<div slot="footer" />
+</AppLayout>
