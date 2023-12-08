@@ -1,0 +1,50 @@
+---
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
+import PhotoSwiper from "./PhotoSwiper.svelte"
+
+const images = [
+	{
+		srcset: [
+			{
+				media: "not all and (min-width: 768px)",
+				src: "https://dummyimage.com/768x768"
+			},
+			{
+				media: "not all and (min-width: 1024px)",
+				src: "https://dummyimage.com/1024x1024"
+			},
+			{
+				media: "not all and (min-width: 1280px)",
+				src: "https://dummyimage.com/1280x1280"
+			}
+		],
+		src: 'https://dummyimage.com/1800x1800',
+		width: 1800,
+		height: 1800,
+		alt: 'test image 3',
+	},
+	{
+		src: 'https://source.unsplash.com/Volo9FYUAzU/1620x1080',
+		width: 1620,
+		height: 1080,
+		alt: 'test image 1'
+	},
+	{
+		src: 'https://source.unsplash.com/RJzHlbKf6eY/1950x1300',
+		width: 1950,
+		height: 1300,
+		alt: 'test image 2'
+	}
+]
+---
+
+<AppLayout>
+	<div slot="header" />
+	<main class="container mx-auto">
+		<div class="p-4">
+			<PhotoSwiper objName="dummy" {images} client:load />
+		</div>
+	</main>
+	<div slot="footer" />
+</AppLayout>
+
