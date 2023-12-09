@@ -1,0 +1,109 @@
+---
+export const prerender = true
+import fetchApi from "@libs/strapi"
+import Place_Country from "@interface/place_country"
+const countries = await fetchApi<Place_Country[]>({
+	endpoint: "place-countries",
+	wrappedByKey: "data",
+	query: {
+		"populate[0]": "capital",
+		"sort[0]": "name"
+		// "populate[1]": "place_regions"
+	}
+})
+
+import "@fontsource-variable/baloo-2"
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
+---
+
+<AppLayout>
+	<div slot="header" />
+	<main class="container mx-auto px-4">
+		<h1>Countries</h1>
+		<div>
+			{countries.map((data) => {
+				return (
+					<div class="card">
+						<div class="card--nametag">
+							<strong class="block">
+								{data.attributes.name}
+							</strong>
+							<span class="block">
+								{data.attributes.capital.data.attributes.name}
+								<small>
+									({data.attributes.capital.data.attributes.abbreviation})
+								</small>
+							</span>
+						</div>
+						<div class="card--thumbnail hidden">
+							<svg width="480" height="320" />
+							<picture>
+								<source
+									media="not all and (min-width: 768px)"
+									srcset="https://picsum.photos/480/320"
+								/>
+								<img src="https://picsum.photos/1024/768" />
+							</picture>
+						</div>
+					</div>
+				)
+			})}
+		</div>
+	</main>
+	<div slot="footer" />
+</AppLayout>
+
+<style>
+    h1 {
+        @apply text-4xl font-bold;
+        @apply my-4;
+    }
+
+    .container {
+        font-family: "Baloo 2 Variable", sans-serif;
+
+        .card {
+            @apply border block rounded-xl cursor-pointer shadow-md;
+            @apply grid grid-cols-2;
+            grid-template-areas: "nametag thumbnail";
+
+            &--nametag {
+                grid-area: nametag;
+                @apply flex flex-wrap flex-col justify-center items-start;
+                @apply text-2xl p-6;
+            }
+
+            &--thumbnail {
+                grid-area: thumbnail;
+                @apply relative rounded-tr-xl rounded-br-xl overflow-hidden;
+                @apply bg-gray-100;
+
+                > svg,
+                > picture > img {
+                    @apply block w-full h-full max-w-full;
+                    @apply object-cover;
+                }
+
+                > picture {
+                    @apply absolute left-0 top-0 w-full h-full;
+                }
+            }
+
+            @media not all and (min-width: 768px) {
+                @apply grid-cols-none;
+                grid-template-rows: 1fr auto;
+                grid-template-areas: "thumbnail" "nametag";
+
+                .card {
+                    &--nametag {
+						@apply text-xl px-6 py-4;
+                    }
+
+                    &--thumbnail {
+                        @apply rounded-tl-xl rounded-tr-xl rounded-br-none;
+                    }
+                }
+            }
+        }
+    }
+</style>

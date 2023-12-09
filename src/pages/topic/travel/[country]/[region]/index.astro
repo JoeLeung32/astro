@@ -1,0 +1,9 @@
+---
+export const prerender = true;
+const params = Astro.params
+
+const country = params?.country || ""
+const region = params?.region || ""
+---
+<p>Country > Region</p>
+<p>{country} > {region}</p>

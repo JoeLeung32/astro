@@ -1,0 +1,9 @@
+---
+const params = Astro.params
+
+const country = params?.country || ""
+const region = params?.region || ""
+const location = params?.location || ""
+---
+<p>Country > Region > Location</p>
+<p>{country} > {region} > {location}</p>
