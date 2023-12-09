@@ -1,7 +1,7 @@
 ---
 export const prerender = true
 import fetchApi from "@libs/strapi"
-import Place_Country from "@interface/place_country"
+import type Place_Country from "@interface/place_country"
 const countries = await fetchApi<Place_Country[]>({
 	endpoint: "place-countries",
 	wrappedByKey: "data",

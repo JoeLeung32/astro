@@ -10,6 +10,8 @@ export default interface Place_Country {
 		updatedAt: string;
 		publishedAt: string;
 		place_regions: Place_Region[];
-		capital: Place_Region
+		capital: {
+			data: Place_Region
+		}
 	}
 }
