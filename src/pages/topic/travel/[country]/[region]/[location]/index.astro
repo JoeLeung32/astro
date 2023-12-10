@@ -4,10 +4,10 @@ import "@fontsource-variable/baloo-2"
 import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 
 import fetchApi from "@libs/strapi"
-import type Place_Region from "@interface/place_region"
 import type Place_Location from "@interface/place_location"
+import type StrapiMediaImage from "@interface/strapi_media_image"
 export async function getStaticPaths() {
-	const locations = await fetchApi<Place_Location>({
+	const locations = await fetchApi<Place_Location[]>({
 		endpoint: "place-locations",
 		wrappedByKey: "data",
 		query: {
@@ -34,16 +34,21 @@ export async function getStaticPaths() {
 	})
 }
 
-const { pathname } = Astro.url
-const params = Astro.params
+// const { pathname } = Astro.url
+// const params = Astro.params
 const location = Astro.props
 if (!location) {
 	return Astro.redirect("/404")
 }
-const imageData = [location?.attributes.images.data.at(1)] || undefined
+const imageData: StrapiMediaImage[] = location?.attributes.images.data || undefined
 const tagData = location?.attributes.place_location_tags.data || undefined
 const typeData = location?.attributes.place_location_type.data || undefined
 const postCodeData = location?.attributes.place_location_postcode.data || undefined
+
+let imageDummy: StrapiMediaImage[] = []
+if (imageData && imageData.length) {
+	imageDummy.push(imageData.at(1) as StrapiMediaImage)
+}
 ---
 <AppLayout>
 	<div slot="header" />
@@ -61,7 +66,7 @@ const postCodeData = location?.attributes.place_location_postcode.data || undefi
 					<strong>{tag.attributes.name}</strong> <small>{tag.attributes.slug}</small>
 				</p>
 			))}
-			{imageData.map(image => (
+			{imageDummy.map(image => (
 				<figure>
 					<picture>
 						<source media="not all and (min-width: 768px)"

@@ -6,7 +6,7 @@ import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 import fetchApi from "@libs/strapi"
 import type Place_Region from "@interface/place_region"
 export async function getStaticPaths() {
-	const regions = await fetchApi<Place_Region>({
+	const regions = await fetchApi<Place_Region[]>({
 		endpoint: "place-regions",
 		wrappedByKey: "data",
 		query: {
@@ -29,7 +29,7 @@ export async function getStaticPaths() {
 }
 
 const { pathname } = Astro.url
-const params = Astro.params
+// const params = Astro.params
 const region = Astro.props
 if (!region) {
 	return Astro.redirect("/404")

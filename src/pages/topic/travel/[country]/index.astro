@@ -6,7 +6,7 @@ import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 import fetchApi from "@libs/strapi"
 import type Place_Country from "@interface/place_country"
 export async function getStaticPaths() {
-	const countries = await fetchApi<Place_Country>({
+	const countries = await fetchApi<Place_Country[]>({
 		endpoint: "place-countries",
 		wrappedByKey: "data",
 		query: {
@@ -24,13 +24,13 @@ export async function getStaticPaths() {
 }
 
 const { pathname } = Astro.url
-const params = Astro.params
+// const params = Astro.params
 const country = Astro.props
 if (!country) {
 	return Astro.redirect("/404")
 }
 
-const capitalRegionData = country?.attributes.capitalRegion || undefined
+const capitalRegionData = country?.attributes.capitalRegion.data || undefined
 const regionsData = country?.attributes.place_regions.data || undefined
 ---
 
@@ -40,7 +40,7 @@ const regionsData = country?.attributes.place_regions.data || undefined
 		<h1>{country.attributes.name}</h1>
 		<div>
 			<h2>Capital Region:</h2>
-			<p>{capitalRegionData.data.attributes.name}</p>
+			<p>{capitalRegionData.attributes.name}</p>
 		</div>
 		<div>
 			<h2>Regions (State / Territory)</h2>
