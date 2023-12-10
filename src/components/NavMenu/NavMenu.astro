@@ -1,22 +1,23 @@
 ---
+import "@fontsource-variable/baloo-2"
 import NavSection from "./NavSection.astro"
 import type { NavItem } from "./data"
 import navItemData from "./data"
 const navItem = navItemData as NavItem[]
 ---
-<nav id="navMenu" class="bg-white absolute w-full md:max-w-xs shadow hidden select-none">
+<nav id="navMenu" class="bg-white absolute w-full md:max-w-xs shadow hidden select-none z-10">
 	{navItem && navItem.map((item: any) =>
 		<NavSection item={item} />)}
 </nav>
 <style is:inline>
     #menuToggle + nav {
-        display: none;
+		@apply hidden left-0;
         top: 48px;
-        left: 0;
     }
 
     #menuToggle:checked + nav {
         display: block;
+        font-family: "Baloo 2 Variable", sans-serif;
 
         > .section {
             display: block;

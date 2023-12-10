@@ -6,7 +6,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Noto Sans HK Variable", "Lora Variable", ...defaultTheme.fontFamily.sans]
+                sans: ["Noto Sans HK Variable", "Baloo 2 Variable", "Lora Variable", ...defaultTheme.fontFamily.sans]
             }
         },
     },

@@ -1,0 +1,135 @@
+---
+export const prerender = true
+import "@fontsource-variable/baloo-2"
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
+
+import fetchApi from "@libs/strapi"
+import type Place_Region from "@interface/place_region"
+export async function getStaticPaths() {
+	const regions = await fetchApi<Place_Region[]>({
+		endpoint: "place-regions",
+		wrappedByKey: "data",
+		query: {
+			"populate[place_country]": "*",
+			"populate[place_location_postcodes][sort][0]": "postcode:ASC",
+			// "populate[place_location_postcodes][populate]": "place_locations",
+			"populate[place_location_postcodes][populate][place_locations][populate][images][sort][0]": "name:ASC"
+		}
+	})
+	return regions.map((data) => {
+		const place_country = data.attributes.place_country
+		return {
+			params: {
+				country: place_country.data.attributes.name.toLowerCase(),
+				region: data.attributes.name.toLowerCase()
+			},
+			props: data
+		}
+	})
+}
+
+const { pathname } = Astro.url
+// const params = Astro.params
+const region = Astro.props
+if (!region) {
+	return Astro.redirect("/404")
+}
+const postCodeData = region?.attributes.place_location_postcodes.data || undefined
+---
+<AppLayout>
+	<div slot="header" />
+	<main class="container mx-auto px-4">
+		<h1>{region.attributes.name}</h1>
+		<h2>By Place</h2>
+		{postCodeData.map((area) => (
+			<h3>
+				<span>{area.attributes.name}</span>
+				<span class="font-medium">{region.attributes.abbreviation} {area.attributes.postcode}</span>
+			</h3>
+			<div class="location-grid">
+				{area.attributes.place_locations.data.map(location => (
+					<div class="location-grid--card"
+						 data-url={`${pathname}/${location.attributes.name}`}>
+						<div class="location-grid--card-thumbnail">
+							<img src={location.attributes.images.data[0]?.attributes.formats.medium?.url} />
+						</div>
+						<p class="location-grid--card-name">
+							<strong>{location.attributes.name}</strong>
+						</p>
+					</div>
+				))}
+			</div>
+		))}
+	</main>
+	<div slot="footer" />
+</AppLayout>
+
+<script define:vars={{ pathname }}>
+	if (document) {
+		const cards = document.querySelectorAll(".location-grid--card")
+		cards.forEach(card => {
+			card.addEventListener("click", function() {
+				const url = this.dataset.url.replace("//", "/").toLowerCase()
+				if (window) window.location.href = url
+			})
+		})
+	}
+</script>
+
+<style>
+    h1 {
+        @apply text-4xl font-bold;
+        @apply my-4;
+    }
+
+    h2 {
+        @apply text-3xl font-bold;
+        @apply my-4;
+    }
+
+    h3 {
+        @apply text-2xl font-bold;
+        @apply my-4;
+    }
+
+    main {
+        font-family: "Baloo 2 Variable", sans-serif;
+    }
+
+    .location-grid {
+        @apply overflow-hidden overflow-x-auto;
+        @apply grid grid-cols-4 gap-4 pb-4;
+
+        @media not all and (min-width: 1280px) {
+            @apply grid grid-cols-3 gap-4;
+        }
+
+        @media not all and (min-width: 1024px) {
+            @apply grid grid-cols-2 gap-3;
+        }
+
+        @media not all and (min-width: 768px) {
+            @apply grid grid-flow-col gap-4;
+            grid-template-columns: repeat(auto-fill, 240px);
+            grid-auto-columns: 240px;
+            max-width: calc(100dvw - (theme(padding.4) * 2));
+        }
+
+        &--card {
+            @apply border rounded-xl overflow-hidden shadow;
+            @apply cursor-pointer;
+
+			&-thumbnail {
+				> img {
+                    @apply block w-full h-full max-w-full max-h-full;
+                    @apply object-cover;
+                    aspect-ratio: 16/9;
+				}
+			}
+
+			&-name {
+				@apply p-4;
+			}
+        }
+    }
+</style>
