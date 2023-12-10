@@ -1,8 +1,81 @@
 ---
-export const prerender = true;
-const params = Astro.params
+export const prerender = true
+import "@fontsource-variable/baloo-2"
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 
-const country = params?.country || ""
+import fetchApi from "@libs/strapi"
+import type Place_Country from "@interface/place_country"
+export async function getStaticPaths() {
+	const countries = await fetchApi<Place_Country>({
+		endpoint: "place-countries",
+		wrappedByKey: "data",
+		query: {
+			"populate[place_regions][sort][0]": "abbreviation:ASC",
+			"populate[place_regions][[filters][place_location_postcodes][id][$gte]": "1",
+			"populate[capitalRegion]": "*"
+		}
+	})
+	return countries.map((data) => ({
+		params: {
+			country: data.attributes.name.toLowerCase()
+		},
+		props: data
+	}))
+}
+
+const { pathname } = Astro.url
+const params = Astro.params
+const country = Astro.props
+if (!country) {
+	return Astro.redirect("/404")
+}
+
+const capitalRegionData = country?.attributes.capitalRegion || undefined
+const regionsData = country?.attributes.place_regions.data || undefined
 ---
-<p>Country</p>
-<p>{country}</p>
+
+<AppLayout>
+	<div slot="header" />
+	<main class="container mx-auto px-4">
+		<h1>{country.attributes.name}</h1>
+		<div>
+			<h2>Capital Region:</h2>
+			<p>{capitalRegionData.data.attributes.name}</p>
+		</div>
+		<div>
+			<h2>Regions (State / Territory)</h2>
+			<div>
+				{regionsData.map((region) => (
+					<div>
+						<h3>{region.attributes.name}</h3>
+						<a href={`${pathname}/${region.attributes.name}`.replace("//", "/").toLowerCase()}>
+							{`${pathname}/${region.attributes.name}`.replace("//", "/").toLowerCase()}
+						</a>
+					</div>
+				))}
+			</div>
+		</div>
+	</main>
+	<div slot="footer" />
+</AppLayout>
+
+<style>
+    h1 {
+        @apply text-4xl font-bold;
+        @apply my-4;
+    }
+
+    h2 {
+        @apply text-2xl font-bold;
+        @apply my-4;
+    }
+
+    h3 {
+        @apply text-lg font-bold;
+        @apply my-4;
+    }
+
+    main {
+        font-family: "Baloo 2 Variable", sans-serif;
+    }
+</style>

@@ -1,57 +1,62 @@
 ---
 export const prerender = true
+
+import "@fontsource-variable/baloo-2"
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
+const { pathname } = Astro.url
+
 import fetchApi from "@libs/strapi"
 import type Place_Country from "@interface/place_country"
 const countries = await fetchApi<Place_Country[]>({
 	endpoint: "place-countries",
 	wrappedByKey: "data",
 	query: {
-		"populate[0]": "capital",
+		// "populate[0]": "capitalRegion",
 		"sort[0]": "name"
-		// "populate[1]": "place_regions"
 	}
 })
-
-import "@fontsource-variable/baloo-2"
-import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 ---
 
 <AppLayout>
 	<div slot="header" />
 	<main class="container mx-auto px-4">
-		<h1>Countries</h1>
-		<div>
-			{countries.map((data) => {
-				return (
-					<div class="card">
-						<div class="card--nametag">
-							<strong class="block">
-								{data.attributes.name}
-							</strong>
-							<span class="block">
-								{data.attributes.capital.data.attributes.name}
-								<small>
-									({data.attributes.capital.data.attributes.abbreviation})
-								</small>
-							</span>
-						</div>
-						<div class="card--thumbnail hidden">
-							<svg width="480" height="320" />
-							<picture>
-								<source
-									media="not all and (min-width: 768px)"
-									srcset="https://picsum.photos/480/320"
-								/>
-								<img src="https://picsum.photos/1024/768" />
-							</picture>
-						</div>
+		<h1>Travel</h1>
+		<div class="cardboard">
+			{countries.map((data) => (
+				<div class="card" data-url={`${pathname}/${data.attributes.name}`}>
+					<div class="card--nametag">
+						<h2 class="block">
+							{data.attributes.name}
+						</h2>
 					</div>
-				)
-			})}
+					<div class="card--thumbnail">
+						<svg width="480" height="320" />
+						<picture>
+							<source
+								media="not all and (min-width: 768px)"
+								srcset="https://picsum.photos/1024/768"
+							/>
+							<img src="https://picsum.photos/1024/768" />
+						</picture>
+					</div>
+				</div>
+			))}
 		</div>
 	</main>
 	<div slot="footer" />
 </AppLayout>
+
+<script define:vars={{ pathname }}>
+	if (document) {
+		const cards = document.querySelectorAll(".card")
+		cards.forEach(card => {
+			card.addEventListener("click", function() {
+				const url = this.dataset.url.replace("//", "/").toLowerCase()
+				if (window) window.location.href = url
+			})
+		})
+	}
+</script>
 
 <style>
     h1 {
@@ -59,48 +64,74 @@ import AppLayout from "@layouts/AppLayout/AppLayout.astro"
         @apply my-4;
     }
 
-    .container {
+    main {
         font-family: "Baloo 2 Variable", sans-serif;
+    }
 
-        .card {
-            @apply border block rounded-xl cursor-pointer shadow-md;
-            @apply grid grid-cols-2;
-            grid-template-areas: "nametag thumbnail";
+    .cardboard {
+        @apply grid grid-cols-2 gap-4;
+        @apply mb-4;
+    }
 
-            &--nametag {
-                grid-area: nametag;
-                @apply flex flex-wrap flex-col justify-center items-start;
-                @apply text-2xl p-6;
-            }
+    .card {
+        @apply border block rounded-xl cursor-pointer shadow;
+        @apply grid grid-cols-2;
+        grid-template-areas: "nametag thumbnail";
 
-            &--thumbnail {
-                grid-area: thumbnail;
-                @apply relative rounded-tr-xl rounded-br-xl overflow-hidden;
-                @apply bg-gray-100;
+        &--thumbnail {
+            @apply rounded-xl rounded-l-none;
+        }
 
-                > svg,
-                > picture > img {
-                    @apply block w-full h-full max-w-full;
-                    @apply object-cover;
-                }
+        &:nth-child(4n+1),
+        &:nth-child(4n+2) {
+            grid-template-areas: "thumbnail nametag";
 
-                > picture {
-                    @apply absolute left-0 top-0 w-full h-full;
+            .card {
+                &--thumbnail {
+                    @apply rounded-xl rounded-r-none;
                 }
             }
+        }
 
-            @media not all and (min-width: 768px) {
+        &--nametag {
+            grid-area: nametag;
+            @apply flex flex-wrap flex-col justify-center items-start;
+            @apply text-xl px-6 py-4;
+
+            > *:first-child {
+                @apply line-clamp-1 font-bold;
+            }
+        }
+
+        &--thumbnail {
+            @apply relative overflow-hidden;
+            @apply bg-gray-100 shadow-inner;
+            grid-area: thumbnail;
+            aspect-ratio: 16/9;
+
+            > svg,
+            > picture > img {
+                @apply block w-full h-full max-w-full max-h-full;
+                @apply object-cover;
+            }
+
+            > picture {
+                @apply absolute left-0 top-0 w-full h-full;
+            }
+        }
+
+        @media not all and (min-width: 1024px) {
+
+            &:nth-child(odd),
+            &:nth-child(even) {
                 @apply grid-cols-none;
                 grid-template-rows: 1fr auto;
                 grid-template-areas: "thumbnail" "nametag";
 
                 .card {
-                    &--nametag {
-						@apply text-xl px-6 py-4;
-                    }
-
                     &--thumbnail {
-                        @apply rounded-tl-xl rounded-tr-xl rounded-br-none;
+                        aspect-ratio: 16/9;
+                        @apply rounded-xl rounded-b-none;
                     }
                 }
             }

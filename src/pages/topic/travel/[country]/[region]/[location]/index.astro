@@ -1,9 +1,103 @@
 ---
-const params = Astro.params
+export const prerender = true
+import "@fontsource-variable/baloo-2"
+import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 
-const country = params?.country || ""
-const region = params?.region || ""
-const location = params?.location || ""
+import fetchApi from "@libs/strapi"
+import type Place_Region from "@interface/place_region"
+import type Place_Location from "@interface/place_location"
+export async function getStaticPaths() {
+	const locations = await fetchApi<Place_Location>({
+		endpoint: "place-locations",
+		wrappedByKey: "data",
+		query: {
+			"populate[images][sort][0]": "name:ASC",
+			"populate[place_location_tags]": "*",
+			"populate[place_location_type]": "*",
+			"populate[place_location_postcodes]": "*",
+			"populate[place_location_postcode][populate][place_region][fields][0]": "name",
+			"populate[place_location_postcode][populate][place_region][populate][place_country][fields][0]": "name"
+		}
+	})
+	return locations.map((data) => {
+		const place_location_postcode = data.attributes.place_location_postcode
+		const place_region = place_location_postcode.data.attributes.place_region
+		const place_country = place_region.data.attributes.place_country
+		return {
+			params: {
+				country: place_country.data.attributes.name.toLowerCase(),
+				region: place_region.data.attributes.name.toLowerCase(),
+				location: data.attributes.name.toLowerCase()
+			},
+			props: data
+		}
+	})
+}
+
+const { pathname } = Astro.url
+const params = Astro.params
+const location = Astro.props
+if (!location) {
+	return Astro.redirect("/404")
+}
+const imageData = [location?.attributes.images.data.at(1)] || undefined
+const tagData = location?.attributes.place_location_tags.data || undefined
+const typeData = location?.attributes.place_location_type.data || undefined
+const postCodeData = location?.attributes.place_location_postcode.data || undefined
 ---
-<p>Country > Region > Location</p>
-<p>{country} > {region} > {location}</p>
+<AppLayout>
+	<div slot="header" />
+	<main class="container mx-auto px-4">
+		<h1>{location.attributes.name}</h1>
+		<div>
+			<p>{location.attributes.address}</p>
+			<p>{location.attributes.latitude}</p>
+			<p>{location.attributes.longitude}</p>
+			<p>{location.attributes.description}</p>
+			<p>{postCodeData.attributes.postcode}, {postCodeData.attributes.name}</p>
+			<p><strong>{typeData.attributes.name}</strong> <small>{typeData.attributes.slug}</small></p>
+			{tagData.map(tag => (
+				<p>
+					<strong>{tag.attributes.name}</strong> <small>{tag.attributes.slug}</small>
+				</p>
+			))}
+			{imageData.map(image => (
+				<figure>
+					<picture>
+						<source media="not all and (min-width: 768px)"
+								srcset={image.attributes.formats.small.url} />
+						<img
+							src={image.attributes.formats.medium.url}
+							width={image.attributes.width}
+							height={image.attributes.height}
+							class="max-w-full max-h-full"
+						/>
+					</picture>
+					<figcaption>{image.attributes.name}</figcaption>
+				</figure>
+			))}
+		</div>
+	</main>
+	<div slot="footer" />
+</AppLayout>
+
+<style>
+    h1 {
+        @apply text-4xl font-bold;
+        @apply my-4;
+    }
+
+    h2 {
+        @apply text-2xl font-bold;
+        @apply my-4;
+    }
+
+    h3 {
+        @apply text-lg font-bold;
+        @apply my-4;
+    }
+
+    main {
+        font-family: "Baloo 2 Variable", sans-serif;
+    }
+</style>
