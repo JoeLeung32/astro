@@ -1,0 +1,11 @@
+.ff {
+    &-baloo {
+        font-family: "Baloo 2 Variable", sans-serif;
+    }
+    &-lora {
+        font-family: "Lora Variable", sans-serif;
+    }
+    &-noto {
+        font-family: "Noto Sans HK Variable", sans-serif;
+    }
+}

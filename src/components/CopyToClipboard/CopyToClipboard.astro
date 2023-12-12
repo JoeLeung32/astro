@@ -1,26 +1,37 @@
 ---
 import { Icon } from "astro-icon/components"
+
+const props = Astro.props
 ---
 <!--
 flex flex-wrap justify-start items-center gap-2 border-b-2 border-gray-200
 -->
-<div class="copyToClipboard gap-2 flex flex-nowrap items-center">
-	<div class="underline underline-offset-2 decoration-gray-400">
-		<slot />
+<div class="copyToClipboard gap-1 flex flex-nowrap items-center">
+	<div class="flex-grow-0 flex-shrink underline underline-offset-2 decoration-gray-400">
+		{props.value}
 	</div>
-	<div data-copyToClipboard class="cursor-pointer">
-		<Icon name="mdi:content-copy" size={18} />
+	<div
+		class="flex-grow-0 flex-shrink-0 cursor-pointer flex flex-wrap flex-row gap-1"
+
+	>
+		<div data-copyToClipboard>
+			<Icon name="mdi:content-copy" size={18} />
+		</div>
+		{props?.googleMap === "true" && (
+			<a
+				href={`https://www.google.com/maps/search/?api=1&query=${props.value}`}
+				target="_blank"
+				rel="noreferrer"
+			>
+				<Icon name="mdi:google-maps" size={18} />
+			</a>
+		)}
 	</div>
 </div>
-<style>
-    .copyToClipboard {
-
-    }
-</style>
 <script>
 	async function copyToClipboard() {
 		const range = document.createRange()
-		const object = this.parentNode.querySelector(":first-child")
+		const object = this.closest(".copyToClipboard").querySelector(":first-child")
 		const value = object.innerText
 
 		range.selectNode(object)

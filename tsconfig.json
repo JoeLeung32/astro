@@ -7,8 +7,7 @@
       "@interface/*": ["src/interface/*"],
       "@layouts/*": ["src/layouts/*"],
       "@libs/*": ["src/libs/*"],
-      "@sources/*": ["src/sources/*"],
-      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["src/styles/*"],
     },
     "plugins": [
       {

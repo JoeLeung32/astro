@@ -2,62 +2,22 @@
 export const prerender = true;
 import "@fontsource-variable/baloo-2"
 import AppLayout from "@layouts/AppLayout/AppLayout.astro"
+import LinkableCard from "@components/Cards/LinkableCard.svelte"
 const { pathname } = Astro.url
+import "@styles/topic_travel.css"
 ---
-
-<AppLayout>
+<AppLayout title="Topic">
 	<div slot="header" />
-	<main class="container mx-auto px-4">
-		<h1>Topics</h1>
-		<div class="cardboard">
-			<div class="card" data-url={`${pathname}/travel`}>
-				<div class="card--nametag">
-					<h2 class="block">
-						Travel
-					</h2>
-				</div>
+	<div slot="breadcrumb" />
+	<main class="topic-container">
+		<div>
+			<h1 class="topic-h1">Topics</h1>
+			<div class="topic-gridList">
+				<LinkableCard internalUrl={`${pathname}/travel`} client:load>
+					<div slot="title">Travel</div>
+				</LinkableCard>
 			</div>
 		</div>
 	</main>
 	<div slot="footer" />
 </AppLayout>
-
-<script define:vars={{ pathname }}>
-	if (document) {
-		const cards = document.querySelectorAll(".card")
-		cards.forEach(card => {
-			card.addEventListener("click", function() {
-				const url = this.dataset.url.replace("//", "/").toLowerCase()
-				if (window) window.location.href = url
-			})
-		})
-	}
-</script>
-
-<style>
-    h1 {
-        @apply text-4xl font-bold;
-        @apply my-4;
-    }
-
-    main {
-        font-family: "Baloo 2 Variable", sans-serif;
-    }
-
-    .cardboard {
-        @apply grid grid-cols-2;
-    }
-
-    .card {
-        @apply border block rounded-xl cursor-pointer shadow;
-        @apply mb-4;
-
-        &--nametag {
-            @apply flex flex-wrap flex-col justify-center items-start;
-            @apply font-bold text-xl px-6 py-4;
-        }
-
-        @media not all and (min-width: 768px) {
-        }
-    }
-</style>
