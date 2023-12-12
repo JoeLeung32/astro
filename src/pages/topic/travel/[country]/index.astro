@@ -2,7 +2,8 @@
 export const prerender = true
 import "@fontsource-variable/baloo-2"
 import AppLayout from "@layouts/AppLayout/AppLayout.astro"
-
+import LinkableCard from "@components/Cards/LinkableCard.svelte"
+import "@styles/topic_travel.css"
 import fetchApi from "@libs/strapi"
 import type Place_Country from "@interface/place_country"
 export async function getStaticPaths() {
@@ -17,7 +18,7 @@ export async function getStaticPaths() {
 	})
 	return countries.map((data) => ({
 		params: {
-			country: data.attributes.name.toLowerCase()
+			country: data.attributes.name
 		},
 		props: data
 	}))
@@ -30,52 +31,35 @@ if (!country) {
 	return Astro.redirect("/404")
 }
 
-const capitalRegionData = country?.attributes.capitalRegion.data || undefined
+// const capitalRegionData = country?.attributes.capitalRegion.data || undefined
 const regionsData = country?.attributes.place_regions.data || undefined
 ---
-
-<AppLayout>
+<AppLayout title={country.attributes.name}>
 	<div slot="header" />
-	<main class="container mx-auto px-4">
-		<h1>{country.attributes.name}</h1>
-		<div>
-			<h2>Capital Region:</h2>
-			<p>{capitalRegionData.attributes.name}</p>
-		</div>
-		<div>
-			<h2>Regions (State / Territory)</h2>
-			<div>
-				{regionsData.map((region) => (
-					<div>
-						<h3>{region.attributes.name}</h3>
-						<a href={`${pathname}/${region.attributes.name}`.replace("//", "/").toLowerCase()}>
-							{`${pathname}/${region.attributes.name}`.replace("//", "/").toLowerCase()}
-						</a>
-					</div>
-				))}
-			</div>
+	<div slot="breadcrumb" />
+	<main class="topic-container">
+		<h1 class="topic-h1">{country.attributes.name}</h1>
+		<!--
+		<h2 class="topic-h2">Capital Region:</h2>
+		<p>{capitalRegionData.attributes.name}</p>
+		-->
+		<h2 class="topic-h2">Regions (State / Territory)</h2>
+		<div class="topic-gridList">
+			{regionsData.map((data) => (
+				<LinkableCard internalUrl={`${pathname}/${data.attributes.name}`} client:load>
+					<picture slot="thumbnail">
+						<source
+							media="not all and (min-width: 768px)"
+							srcset="https://picsum.photos/480/270"
+						/>
+						<img src="https://picsum.photos/1024/768" />
+					</picture>
+					<span slot="title">
+						{data.attributes.name}
+					</span>
+				</LinkableCard>
+			))}
 		</div>
 	</main>
 	<div slot="footer" />
 </AppLayout>
-
-<style>
-    h1 {
-        @apply text-4xl font-bold;
-        @apply my-4;
-    }
-
-    h2 {
-        @apply text-2xl font-bold;
-        @apply my-4;
-    }
-
-    h3 {
-        @apply text-lg font-bold;
-        @apply my-4;
-    }
-
-    main {
-        font-family: "Baloo 2 Variable", sans-serif;
-    }
-</style>

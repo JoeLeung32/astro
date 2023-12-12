@@ -1,8 +1,11 @@
 ---
 export const prerender = true
+import { Icon } from "astro-icon/components"
 import "@fontsource-variable/baloo-2"
 import AppLayout from "@layouts/AppLayout/AppLayout.astro"
-
+import CopyToClipboard from "@components/CopyToClipboard/CopyToClipboard.astro"
+import PhotoSwiper from "@components/PhotoSwiper/PhotoSwiper.svelte"
+import "@styles/topic_travel.css"
 import fetchApi from "@libs/strapi"
 import type Place_Location from "@interface/place_location"
 import type StrapiMediaImage from "@interface/strapi_media_image"
@@ -25,9 +28,9 @@ export async function getStaticPaths() {
 		const place_country = place_region.data.attributes.place_country
 		return {
 			params: {
-				country: place_country.data.attributes.name.toLowerCase(),
-				region: place_region.data.attributes.name.toLowerCase(),
-				location: data.attributes.name.toLowerCase()
+				country: place_country.data.attributes.name,
+				region: place_region.data.attributes.name,
+				location: data.attributes.name
 			},
 			props: data
 		}
@@ -44,65 +47,47 @@ const imageData: StrapiMediaImage[] = location?.attributes.images.data || undefi
 const tagData = location?.attributes.place_location_tags.data || undefined
 const typeData = location?.attributes.place_location_type.data || undefined
 const postCodeData = location?.attributes.place_location_postcode.data || undefined
-
-let imageDummy: StrapiMediaImage[] = []
-if (imageData && imageData.length) {
-	imageDummy.push(imageData.at(1) as StrapiMediaImage)
-}
 ---
-<AppLayout>
+<AppLayout title={location.attributes.name} description={location.attributes.description}>
 	<div slot="header" />
-	<main class="container mx-auto px-4">
-		<h1>{location.attributes.name}</h1>
-		<div>
-			<p>{location.attributes.address}</p>
-			<p>{location.attributes.latitude}</p>
-			<p>{location.attributes.longitude}</p>
-			<p>{location.attributes.description}</p>
+	<div slot="breadcrumb" />
+	<main class="topic-container-pt0">
+		<h1 class="topic-h1">{location.attributes.name}</h1>
+		<div class="location-information grid grid-cols-2 gap-2">
+			<Icon name="mdi:book-open" size={18} />
+			<div>
+				<p title={typeData.attributes.slug}>{typeData.attributes.name}</p>
+			</div>
+			<Icon name="mdi:tag" size={18} />
+			<div>
+				{tagData.map(tag => (
+					<span title={tag.attributes.slug}>{tag.attributes.name}</span>
+				))}
+			</div>
+			<Icon name="mdi:land-plots-marker" size={18} />
 			<p>{postCodeData.attributes.postcode}, {postCodeData.attributes.name}</p>
-			<p><strong>{typeData.attributes.name}</strong> <small>{typeData.attributes.slug}</small></p>
-			{tagData.map(tag => (
-				<p>
-					<strong>{tag.attributes.name}</strong> <small>{tag.attributes.slug}</small>
-				</p>
-			))}
-			{imageDummy.map(image => (
-				<figure>
-					<picture>
-						<source media="not all and (min-width: 768px)"
-								srcset={image.attributes.formats.small.url} />
-						<img
-							src={image.attributes.formats.medium.url}
-							width={image.attributes.width}
-							height={image.attributes.height}
-							class="max-w-full max-h-full"
-						/>
-					</picture>
-					<figcaption>{image.attributes.name}</figcaption>
-				</figure>
-			))}
+			<Icon name="mdi:home-city-outline" size={18} />
+			<CopyToClipboard googleMap="true" value={location.attributes.address} />
+			<Icon name="mdi:map-marker" size={18} />
+			<CopyToClipboard googleMap="true" value={`${location.attributes.latitude}, ${location.attributes.longitude}`} />
 		</div>
+		<hr class="my-4"/>
+		<h3 class="topic-h3">Description</h3>
+		<div class="prose">
+			{location.attributes.description}
+		</div>
+		<hr class="my-4"/>
+		<h3 class="topic-h3">Photos</h3>
+		<PhotoSwiper element="placeGallery" images={imageData} client:load />
 	</main>
 	<div slot="footer" />
 </AppLayout>
 
 <style>
-    h1 {
-        @apply text-4xl font-bold;
-        @apply my-4;
-    }
-
-    h2 {
-        @apply text-2xl font-bold;
-        @apply my-4;
-    }
-
-    h3 {
-        @apply text-lg font-bold;
-        @apply my-4;
-    }
-
-    main {
-        font-family: "Baloo 2 Variable", sans-serif;
-    }
+    .location {
+		&-information {
+            grid-template-columns: 18px 1fr;
+			@apply items-center;
+		}
+	}
 </style>

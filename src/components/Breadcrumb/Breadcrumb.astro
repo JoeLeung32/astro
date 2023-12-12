@@ -1,0 +1,22 @@
+---
+import { Icon } from "astro-icon/components"
+const { pathname } = Astro.url
+const breadcrumb = pathname?.split("/")?.filter(t => t.length)?.slice(0, -1)
+const breadcrumbList = breadcrumb?.map((urlText, idx, ary) => ({
+	name: decodeURIComponent(urlText),
+	url: `/${ary.slice(0, idx + 1).join("/")}`
+}))
+---
+<div class="container mx-auto breadcrumb text-xs font-medium ff-baloo p-4">
+	<div class="flex flex-wrap gap-0.5 justify-start items-center">
+		<a href="/">
+			<Icon name="mdi:home" size={16} />
+		</a>
+		{breadcrumbList.map(({name, url}) => {
+			return (
+				<Icon name="mdi:chevron-right" size={14} />
+				<a href={url}>{name.toUpperCase()}</a>
+			)
+		})}
+	</div>
+</div>

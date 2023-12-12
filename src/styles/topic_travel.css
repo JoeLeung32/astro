@@ -1,0 +1,57 @@
+@import "global.css";
+
+.topic {
+    &-container {
+        @apply container mx-auto p-4 ff-baloo;
+
+        &-pt0 {
+            @apply container mx-auto p-4 pt-0 ff-baloo;
+        }
+    }
+
+    &-h1,
+    &-h2,
+    &-h3 {
+        @apply font-bold;
+    }
+
+    &-h1 {
+        @apply text-4xl mb-4;
+    }
+
+    &-h2 {
+        @apply text-3xl mb-3;
+    }
+
+    &-h3 {
+        @apply text-2xl mb-2;
+    }
+
+    &-gridList {
+        @apply grid grid-cols-1 md:grid-cols-2 gap-4 mb-10;
+    }
+
+    &-horizontalGridList {
+        @apply overflow-hidden overflow-x-scroll;
+        @apply grid grid-cols-4 gap-4 p-1 px-0 mb-4;
+
+        &:last-child {
+            @apply mb-0;
+        }
+
+        @media not all and (min-width: 1280px) {
+            @apply grid grid-cols-3 gap-4;
+        }
+
+        @media not all and (min-width: 1024px) {
+            @apply grid grid-cols-2 gap-3;
+        }
+
+        @media not all and (min-width: 768px) {
+            @apply grid grid-flow-col gap-4 px-2 pb-4;
+            grid-template-columns: repeat(auto-fill, 240px);
+            grid-auto-columns: 240px;
+            max-width: calc(100dvw - (theme(padding.4) * 2));
+        }
+    }
+}
