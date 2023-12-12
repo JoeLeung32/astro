@@ -1,6 +1,7 @@
 ---
+import { Icon } from "astro-icon/components"
 export const prerender = true
-
+import { Icon } from "astro-icon/components"
 import "@fontsource-variable/baloo-2"
 import AppLayout from "@layouts/AppLayout/AppLayout.astro"
 const { pathname } = Astro.url
@@ -25,12 +26,15 @@ const countries = await fetchApi<Place_Country[]>({
 			{countries.map((data) => (
 				<div class="card" data-url={`${pathname}/${data.attributes.name}`}>
 					<div class="card--nametag">
-						<h2 class="block">
+						<span class="block">
 							{data.attributes.name}
-						</h2>
+						</span>
 					</div>
 					<div class="card--thumbnail">
 						<svg width="480" height="320" />
+						<div class="card--thumbnail-loading">
+							<Icon name="mdi:loading" size={32} class="animate-spin" />
+						</div>
 						<picture>
 							<source
 								media="not all and (min-width: 768px)"
@@ -69,7 +73,7 @@ const countries = await fetchApi<Place_Country[]>({
     }
 
     .cardboard {
-        @apply grid grid-cols-2 gap-4;
+        @apply grid grid-cols-1 md:grid-cols-2 gap-4;
         @apply mb-4;
     }
 
@@ -77,10 +81,6 @@ const countries = await fetchApi<Place_Country[]>({
         @apply border block rounded-xl cursor-pointer shadow;
         @apply grid grid-cols-2;
         grid-template-areas: "nametag thumbnail";
-
-        &--thumbnail {
-            @apply rounded-xl rounded-l-none;
-        }
 
         &:nth-child(4n+1),
         &:nth-child(4n+2) {
@@ -104,10 +104,17 @@ const countries = await fetchApi<Place_Country[]>({
         }
 
         &--thumbnail {
+            @apply rounded-xl rounded-l-none;
             @apply relative overflow-hidden;
             @apply bg-gray-100 shadow-inner;
             grid-area: thumbnail;
             aspect-ratio: 16/9;
+
+            &-loading {
+                @apply flex flex-nowrap justify-center items-center;
+                @apply absolute top-0 left-0 z-0;
+                @apply w-full h-full;
+            }
 
             > svg,
             > picture > img {
