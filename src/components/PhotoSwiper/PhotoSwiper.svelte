@@ -71,18 +71,22 @@
 <style>
 	.pswp-gallery {
 		@apply grid gap-4;
-        grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 
-        @media not all and (min-width: 1536px) {
-			grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        @media screen(md) {
+            grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
         }
 
-        @media not all and (min-width: 1280px) {
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        @media screen(lg) {
+            grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
         }
 
-        @media not all and (min-width: 768px) {
-			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        @media screen(xl) {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        @media screen(2xl) {
+            grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
         }
 
         &-loading {

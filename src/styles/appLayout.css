@@ -4,11 +4,24 @@ body > div.app {
     @apply grid gap-0;
     min-height: 100dvh;
     grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: minmax(auto, auto) minmax(32px, auto) minmax(auto, auto) minmax(auto, auto) 1fr minmax(auto, auto) minmax(24px, auto) minmax(auto, auto);
-    grid-template-areas: "hd-bf" "hd" "hd-af" "bc" "ma" "ft-bf" "ft" "ft-af";
-
-    @media not all and (min-width: 768px) {
-    }
+    grid-template-rows:
+            minmax(0, auto)
+            minmax(32px, auto)
+            minmax(0, auto)
+            minmax(0, auto)
+            1fr
+            minmax(0, auto)
+            minmax(24px, auto)
+            minmax(0, auto);
+    grid-template-areas:
+            "hd-bf"
+            "hd"
+            "hd-af"
+            "bc"
+            "ma"
+            "ft-bf"
+            "ft"
+            "ft-af";
 
     header {
         grid-area: hd;

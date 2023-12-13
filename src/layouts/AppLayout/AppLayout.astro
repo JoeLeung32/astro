@@ -31,17 +31,29 @@ import Footer from "@components/Footer/Footer.astro"
 </head>
 <body>
 <div class="app">
-	<slot name="before-header" />
+	{Astro.slots.has("before-header") &&
+		<div class="before-header">
+			<slot name="before-header" />
+		</div>}
 	{Astro.slots.has("header") &&
 		<Header />}
+	{Astro.slots.has("after-header") &&
+		<div class="after-header">
+			<slot name="after-header" />
+		</div>}
 	{Astro.slots.has("breadcrumb") &&
 		<Breadcrumb />}
-	<slot name="after-header" />
 	<slot />
-	<slot name=="before-footer" />
+	{Astro.slots.has("before-footer") &&
+		<div class="before-footer">
+			<slot name="before-footer" />
+		</div>}
 	{Astro.slots.has("footer") &&
 		<Footer />}
-	<slot name="after-footer" />
+	{Astro.slots.has("after-footer") &&
+		<div class="after-footer">
+			<slot name="after-footer" />
+		</div>}
 </div>
 </body>
 </html>
