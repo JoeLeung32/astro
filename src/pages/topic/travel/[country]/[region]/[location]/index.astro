@@ -48,7 +48,7 @@ const tagData = location?.attributes.place_location_tags.data || []
 const typeData = location?.attributes.place_location_type.data || undefined
 const postCodeData = location?.attributes.place_location_postcode.data || undefined
 
-const tagMoved = tagData?.find(({attributes}) => attributes.slug.includes(["moved"]))
+const tagMoved = tagData?.find(({attributes}) => ["moved"].includes(attributes.slug))
 ---
 <AppLayout title={location.attributes.name} description={location.attributes.description}>
 	<div slot="header" />
