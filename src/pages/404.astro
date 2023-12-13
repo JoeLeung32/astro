@@ -1,26 +1,29 @@
 ---
-import AppLayout from "../layouts/AppLayout/AppLayout.astro";
 export const prerender = false
-const time = new Date().toLocaleTimeString();
+import "@fontsource-variable/lora"
+import "@styles/global.css"
+import AppLayout from "../layouts/AppLayout/AppLayout.astro"
 ---
 <AppLayout>
-<main>
-  <h1>404</h1>
-  <h1>{time}</h1>
-</main>
+	<main class="flex flex-wrap justify-center items-center w-full h-full">
+		<div class="text-center text-white">
+			<div class="ff-lora text-9xl">404</div>
+			<div class="ff-lora text-md">Page not found</div>
+			<div class="mb-10"></div>
+			<a href="/" class="lowercase text-xs">back to home</a>
+		</div>
+	</main>
 </AppLayout>
 <style is:inline>
     body > div.app {
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: 1fr;
-        grid-template-areas:
-								"ma";
-
-        @media not all and (min-width: 768px) {
-        }
-
-        main {
-            grid-area: ma;
-        }
+        grid-template-areas: "ma";
+    }
+</style>
+<style>
+    main {
+		@apply bg-red-500;
+        grid-area: ma;
     }
 </style>

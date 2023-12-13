@@ -23,13 +23,6 @@ const countries = await fetchApi<Place_Country[]>({
 		<div class="topic-gridList">
 			{countries.map((data) => (
 				<LinkableCard internalUrl={`${pathname}/${data.attributes.name}`} client:load>
-					<picture slot="thumbnail">
-						<source
-							media="not all and (min-width: 768px)"
-							srcset="https://picsum.photos/480/270"
-						/>
-						<img src="https://picsum.photos/1024/768" />
-					</picture>
 					<span slot="title">
 						{data.attributes.name}
 					</span>

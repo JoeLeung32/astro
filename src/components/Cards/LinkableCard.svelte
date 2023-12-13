@@ -71,8 +71,5 @@
 				}
             }
         }
-
-        @media not all and (min-width: 768px) {
-        }
     }
 </style>
