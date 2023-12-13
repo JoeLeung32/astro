@@ -1,10 +1,64 @@
 ---
-import NavSectionItem from "./NavSectionItem.astro"
-const { item: { child } } = Astro.props
+import { Icon } from "astro-icon/components"
+const { item: { title, child, href, target } } = Astro.props
 const hadChild = !(typeof child === "undefined" || child.length === 0)
 ---
 <div class="section">
-	<NavSectionItem {...Astro.props} />
+	<div class="section-item">
+		<a href={href} target={target} class="section-item-name">
+			<span>{title}</span>
+		</a>
+		{hadChild && (
+			<div class="section-item-icon">
+				<Icon name="mdi:chevron-right" size={28} />
+			</div>
+		)}
+	</div>
 	{hadChild && child.map((item: any) =>
 		<Astro.self item={item} />)}
 </div>
+<style>
+    .section {
+        &:not(.active) .section {
+            display: none !important;
+        }
+
+		&-item {
+			@apply flex flex-wrap justify-between items-center;
+			@apply cursor-pointer p-0 gap-1;
+			@apply hover:bg-gray-100;
+
+			&-name {
+				@apply flex-grow pl-3 py-2;
+
+				span {
+					@apply text-lg font-medium;
+				}
+			}
+
+			&-icon {
+				@apply p-2 px-4 bg-gray-600;
+
+				> svg {
+					@apply text-white;
+				}
+			}
+		}
+
+        &.active {
+            @apply bg-white shadow-md;
+
+            .section {
+                @apply block relative;
+
+				&-item {
+                    &-icon {
+                        > svg {
+                            @apply rotate-90;
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>

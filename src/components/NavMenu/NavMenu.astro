@@ -3,51 +3,34 @@ import "@fontsource-variable/baloo-2"
 import NavSection from "./NavSection.astro"
 import type { NavItem } from "./data"
 import navItemData from "./data"
+import { Icon } from "astro-icon/components"
 const navItem = navItemData as NavItem[]
 ---
-<nav id="navMenu" class="bg-white absolute w-full md:max-w-xs shadow hidden select-none z-10">
+<label for="menuToggle">
+	<Icon name="mdi:menu" size={32} />
+</label>
+<input type="checkbox" id="menuToggle" value="false" autocomplete="off" />
+<nav id="navMenu" class="ff-baloo">
 	{navItem && navItem.map((item: any) =>
 		<NavSection item={item} />)}
 </nav>
-<style is:inline>
+<style>
+    label[for="menuToggle"] {
+        @apply inline-block cursor-pointer p-2;
+    }
+
+    #menuToggle {
+		@apply hidden;
+	}
+
     #menuToggle + nav {
-		@apply hidden left-0;
+		@apply absolute left-0 z-10 md:max-w-xs;
+        @apply hidden shadow w-full bg-white select-none;
         top: 48px;
     }
 
     #menuToggle:checked + nav {
-        display: block;
-        font-family: "Baloo 2 Variable", sans-serif;
-
-        > .section {
-            display: block;
-        }
-
-        .section {
-
-            &:not(.active) .section {
-                display: none !important;
-            }
-
-            &.active {
-                background: white;
-                box-shadow: inset 0 0 1em 0 rgba(0, 0, 0, .025);
-
-                > .section-item {
-                    background-color: #f9f9f9;
-
-                    > .icon {
-                        > svg {
-                            transform: rotate(90deg);
-						}
-                    }
-                }
-
-                .section {
-                    display: block;
-                }
-            }
-        }
+        @apply block;
     }
 </style>
 <script>

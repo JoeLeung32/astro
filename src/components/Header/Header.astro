@@ -3,16 +3,12 @@ import { Icon } from "astro-icon/components"
 import NavMenu from "../NavMenu/NavMenu.astro"
 ---
 <header class="bg-white shadow select-none">
-	<div class="container mx-auto flex flex-wrap flex-row justify-between items-center p-2 relative">
-		<div>
-			<label for="menuToggle" class="cursor-pointer">
-				<Icon name="mdi:menu" size={32} />
-			</label>
+	<div class="container mx-auto relative flex flex-wrap justify-between items-stretch min-h-[48px]">
+		<div class="flex grow shrink self-stretch">
+			<NavMenu />
 		</div>
-		<div>
+		<div class="flex grow-0 shrink-0 self-stretch items-center px-2">
 			<Icon name="mdi:account-circle" size={32} />
 		</div>
-		<input type="checkbox" id="menuToggle" value="false" class="hidden" autocomplete="off" />
-		<NavMenu />
 	</div>
 </header>
