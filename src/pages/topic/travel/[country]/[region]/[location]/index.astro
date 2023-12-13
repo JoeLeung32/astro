@@ -44,24 +44,34 @@ if (!location) {
 	return Astro.redirect("/404")
 }
 const imageData: StrapiMediaImage[] = location?.attributes.images.data || undefined
-const tagData = location?.attributes.place_location_tags.data || undefined
+const tagData = location?.attributes.place_location_tags.data || []
 const typeData = location?.attributes.place_location_type.data || undefined
 const postCodeData = location?.attributes.place_location_postcode.data || undefined
+
+const tagMoved = tagData?.find(({attributes}) => ["moved"].includes(attributes.slug))
 ---
 <AppLayout title={location.attributes.name} description={location.attributes.description}>
 	<div slot="header" />
 	<div slot="breadcrumb" />
-	<main class="topic-container-pt0">
+	<main class="topic-container">
 		<h1 class="topic-h1">{location.attributes.name}</h1>
+		<div>
+			{tagMoved && (
+				<div class="topic-message">
+					<Icon name="mdi:car-brake-alert" size={18} />
+					<span>This place has been moved/relocated.</span>
+				</div>
+			)}
+		</div>
 		<div class="location-information grid grid-cols-2 gap-2">
 			<Icon name="mdi:book-open" size={18} />
 			<div>
 				<p title={typeData.attributes.slug}>{typeData.attributes.name}</p>
 			</div>
 			<Icon name="mdi:tag" size={18} />
-			<div>
+			<div class="topic-tag">
 				{tagData.map(tag => (
-					<span title={tag.attributes.slug}>{tag.attributes.name}</span>
+					<span class="topic-tag-item" data-value={tag.attributes.slug}>{tag.attributes.name}</span>
 				))}
 			</div>
 			<Icon name="mdi:land-plots-marker" size={18} />
