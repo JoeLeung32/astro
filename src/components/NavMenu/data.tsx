@@ -10,7 +10,7 @@ const data: NavItem[] = [
 	{ title: "Home", href: baseURL },
 	{
 		title: "Topic", href: "/topic", child: [
-			{ title: "Travel", href: "/topic/travel" }
+			{ title: "Travel", href: "/topic/travel" },
 		]
 	}
 ]

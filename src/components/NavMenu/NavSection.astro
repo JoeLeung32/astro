@@ -3,59 +3,122 @@ import { Icon } from "astro-icon/components"
 const { item: { title, child, href, target } } = Astro.props
 const hadChild = !(typeof child === "undefined" || child.length === 0)
 ---
-<div class="section">
-	<div class="section-item">
+<li class="section">
+	<span class="section-item">
 		<a href={href} target={target} class="section-item-name">
 			<span>{title}</span>
 		</a>
 		{hadChild && (
-			<div class="section-item-icon">
+			<span class="section-item-icon">
 				<Icon name="mdi:chevron-right" size={28} />
-			</div>
+			</span>
 		)}
-	</div>
-	{hadChild && child.map((item: any) =>
-		<Astro.self item={item} />)}
-</div>
+	</span>
+	{hadChild && (
+		<ol>
+			{child.map((item: any) => (
+				<Astro.self item={item} />
+			))}
+		</ol>
+	)}
+</li>
 <style>
     .section {
-        &:not(.active) .section {
-            display: none !important;
+        &-item {
+            @apply flex flex-wrap justify-between items-center;
+            @apply cursor-pointer;
+            @apply hover:bg-gray-100;
+            @apply md:justify-start;
+            @apply md:hover:bg-transparent;
+
+            &-name {
+                @apply grow pl-3 py-2;
+                @apply md:grow-0 md:p-0;
+
+                span {
+                    @apply text-lg font-medium;
+                }
+            }
+
+            &-icon {
+                @apply p-2 bg-gray-600;
+                @apply md:p-0 md:bg-transparent;
+
+                > svg {
+                    @apply text-white;
+                    @apply md:text-black;
+                }
+            }
         }
 
-		&-item {
-			@apply flex flex-wrap justify-between items-center;
-			@apply cursor-pointer p-0 gap-1;
-			@apply hover:bg-gray-100;
-
-			&-name {
-				@apply flex-grow pl-3 py-2;
-
-				span {
-					@apply text-lg font-medium;
-				}
-			}
-
-			&-icon {
-				@apply p-2 px-4 bg-gray-600;
-
-				> svg {
-					@apply text-white;
-				}
-			}
-		}
+        &:not(.active) ol {
+            @apply hidden;
+        }
 
         &.active {
-            @apply bg-white shadow-md;
+            > ol {
+                @apply grid bg-white;
+            }
 
             .section {
-                @apply block relative;
+                @apply block;
 
-				&-item {
+                &-item {
                     &-icon {
                         > svg {
                             @apply rotate-90;
                         }
+                    }
+                }
+            }
+        }
+
+        @media screen(md) {
+			> span + ol {
+                @apply absolute;
+				@apply shadow-md;
+
+				ol {
+                    @apply shadow-none ml-4;
+				}
+			}
+
+            ol {
+                @apply grid-rows-1 grid-cols-2 md:grid-cols-1 lg:grid-cols-1;
+                @apply overflow-x-hidden overflow-y-auto;
+
+                min-height: fit-content;
+                max-height: 80dvh;
+
+                .section {
+                    &-item {
+                        @apply justify-between;
+                        @apply px-1 py-2;
+
+                        &-name {
+                            span {
+                                @apply text-lg font-medium;
+                            }
+                        }
+                    }
+
+					ol {
+                        @apply relative;
+					}
+                }
+            }
+
+            &-item {
+                &-name {
+                    @apply px-2;
+                    span {
+                        @apply text-xl font-bold;
+                    }
+                }
+
+                &-icon {
+                    > svg {
+                        @apply rotate-90 text-sm;
                     }
                 }
             }
