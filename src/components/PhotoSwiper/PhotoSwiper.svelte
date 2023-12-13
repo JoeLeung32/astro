@@ -30,7 +30,7 @@
 			data-pswp-height={data.formats?.xlarge?.height || data.height}
 			target="_blank"
 			rel="noreferrer"
-			class={`${element}-item ${idx < preloadItems ? "block" : "hidden"} overflow-hidden rounded-lg shadow-md shadow-gray-300`}
+			class={`${element}-item ${idx < preloadItems ? "block" : "hidden"}`}
 		>
 			<div class="pswp-gallery-loading">
 				<Icon icon="mdi:loading" class="text-3xl text-gray-500 animate-spin" />
@@ -98,6 +98,7 @@
 
 		> a {
 			@apply relative overflow-hidden;
+            @apply rounded-lg shadow-md;
 			@apply bg-gray-100;
             aspect-ratio: 1/1;
 

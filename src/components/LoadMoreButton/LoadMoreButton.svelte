@@ -26,6 +26,6 @@
 
 <p data-loadMore data-wrapper={wrapper} data-item={item}
    on:click={loadMore}
-   class="flex flex-wrap justify-start items-end border border-gray-100 rounded-3xl shadow-md shadow-gray-200 px-4 py-2 font-medium leading-none cursor-pointer select-none">
+   class="flex flex-wrap justify-start items-end rounded-3xl shadow-md px-4 py-2 font-medium leading-none cursor-pointer select-none">
 	Load more photos
 </p>

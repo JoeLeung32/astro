@@ -33,7 +33,7 @@
     &-horizontalGridList {
         @apply overflow-hidden overflow-x-auto;
         @apply grid grid-flow-col gap-4 p-1 px-2 pb-4;
-        @apply md:grid-cols-3 md:px-0;
+        @apply md:grid-cols-3;
         @apply lg:grid-cols-4;
         @apply xl:grid-cols-5;
         @apply 2xl:grid-cols-6;
@@ -46,6 +46,30 @@
             grid-template-columns: repeat(auto-fill, 240px);
             grid-auto-columns: 240px;
             max-width: calc(100dvw - (theme(padding.4) * 2));
+        }
+    }
+
+    &-tag {
+        @apply flex flex-wrap justify-start items-center gap-2;
+
+        &-item {
+            @apply bg-gray-100 rounded-full;
+            @apply px-3 py-1 order-10;
+            @apply text-xs font-semibold uppercase;
+
+            &[data-value="moved"] {
+                @apply bg-amber-100 text-amber-700 order-2;
+            }
+        }
+    }
+
+    &-message {
+        @apply flex flex-wrap justify-start items-center gap-1;
+        @apply px-4 py-2 mb-2 rounded-lg;
+        @apply bg-amber-100 text-amber-700 order-2;
+
+        > span {
+            @apply leading-none font-medium;
         }
     }
 }

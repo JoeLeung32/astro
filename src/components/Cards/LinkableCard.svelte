@@ -35,7 +35,7 @@
 <style>
     .linkableCard {
         @apply flex flex-wrap justify-center items-start;
-        @apply border rounded-xl shadow;
+        @apply rounded-xl shadow-md;
         @apply leading-normal cursor-pointer;
         @apply relative;
 
