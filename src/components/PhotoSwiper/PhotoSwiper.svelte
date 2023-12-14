@@ -62,7 +62,7 @@
 		</a>
 	{/each}
 </div>
-<div class="flex flex-wrap justify-center items-center my-4 ff-baloo">
+<div class="flex flex-wrap justify-center items-center my-4 font-baloo">
 	{#if images.length > preloadItems}
 		<LoadMoreButton wrapper={`.${element}`} item={`.${element}-item.hidden`} offset={preloadItems * 2} client:visible />
 	{/if}
