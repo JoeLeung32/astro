@@ -2,7 +2,7 @@
 
 .topic {
     &-container {
-        @apply container mx-auto px-4 pb-4 ff-baloo;
+        @apply container mx-auto px-4 pb-4 font-baloo;
     }
 
     &-h1,

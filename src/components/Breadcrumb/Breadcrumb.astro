@@ -7,7 +7,7 @@ const breadcrumbList = breadcrumb?.map((urlText, idx, ary) => ({
 	url: `/${ary.slice(0, idx + 1).join("/")}`
 }))
 ---
-<div class="container mx-auto breadcrumb text-xs font-medium ff-baloo p-4">
+<div class="container mx-auto breadcrumb text-xs font-medium font-baloo p-4">
 	<div class="flex flex-wrap gap-0.5 justify-start items-center">
 		<a href="/">
 			<Icon name="mdi:home" size={16} />
