@@ -37,7 +37,7 @@
 	}
 </script>
 {#if title && tree}
-	<span class="item"
+	<span class="item item-dropdown"
 		  data-tree-id="{tree[lvl]}"
 		  on:click|stopPropagation={triggerTabletMenu}
 		  class:bg-gray-100="{$activeMenu[lvl] === tree[lvl]}"
@@ -51,7 +51,7 @@
 				{title}
 			</span>
 		{/if}
-		<span class="item-icon" class:active="{$activeMenu[lvl] === tree[lvl]}">
+		<span class="item-dropdown-icon" class:active="{$activeMenu[lvl] === tree[lvl]}">
 			<Icon icon="mdi:chevron-down" />
 		</span>
 	</span>
@@ -61,13 +61,13 @@
 		</div>
 	</div>
 {:else if title && href}
-	<span class="item">
+	<span class="item item-single">
 		<a href="{href}">
 			{title}
 		</a>
 	</span>
 {:else}
-	<span class="item">
+	<span class="item item-single">
 		<span>
 			{title}
 		</span>
@@ -77,21 +77,33 @@
 	.item {
         @apply grid grid-cols-2 items-center cursor-pointer;
         @apply overflow-hidden w-auto;
-        @apply font-medium leading-none p-2;
+        @apply font-medium leading-none;
         grid-template-columns: 1fr auto;
 
         > a,
         > span {
-            @apply grow;
+            @apply text-base px-4 py-2 grow;
         }
 
-        &-icon {
-            @apply text-xl transition-all;
+		&-single {
+            > a,
+            > span {
+            }
+		}
 
-			&.active {
-				@apply animate-bounce ;
-			}
-        }
+		&-dropdown {
+            > a,
+            > span {
+                @apply pr-0;
+				+ span {
+                    @apply text-base px-2 py-3 transition-all;
+
+                    &.active {
+                        @apply animate-bounce ;
+                    }
+				}
+            }
+		}
 
         &:hover {
             @apply overflow-hidden bg-gray-50;
@@ -99,21 +111,27 @@
 	}
 
 	.sublist {
-        @apply relative collapse transition-all ease-in-out;
-		@apply opacity-0 h-0 top-0;
+        @apply hidden transition-all ease-in-out;
+		@apply relative top-0;
 
-        &.active {
-            @apply visible opacity-100 h-full top-auto;
-        }
+		> div {
+            @apply hidden grid-cols-1 gap-y-2;
+            grid-template-columns: minmax(230px, 1fr);
+		}
 
         &-box {
             @apply bg-white border rounded-xl shadow-lg p-2;
             @apply absolute;
             left: 50%;
             transform: translateX(-50%);
+        }
 
-            @apply grid grid-cols-1;
-            grid-template-columns: minmax(230px, 1fr);
+        &.active {
+            @apply block;
+
+            > div {
+                @apply grid;
+            }
         }
     }
 </style>
